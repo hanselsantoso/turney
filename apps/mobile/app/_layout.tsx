@@ -28,7 +28,9 @@ export default function Root() {
           headerTintColor: tokens.color.text,
           contentStyle: { backgroundColor: tokens.color.bg },
         }}
-      />
+      >
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      </Stack>
     </QueryClientProvider>
   );
 }

@@ -21,6 +21,7 @@ export const publicUser = z
     isAdmin: z.boolean(),
     playerCode: z.string(),
     elo: z.number().int(),
+    city: z.string().nullish(),
   })
   .strip();
 export type PublicUser = z.infer<typeof publicUser>;

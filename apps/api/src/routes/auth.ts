@@ -18,6 +18,7 @@ function toPublic(user: typeof users.$inferSelect) {
     isAdmin: user.isAdmin,
     playerCode: user.playerCode,
     elo: user.elo,
+    city: user.city,
   });
 }
 
