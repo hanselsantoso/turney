@@ -104,6 +104,13 @@ export async function matchRoutes(app: FastifyInstance) {
     return reply.status(201).send(rows);
   });
 
+  app.get("/matches/:id", async (req, reply) => {
+    const { id } = req.params as { id: string };
+    const [match] = await db.select().from(matches).where(eq(matches.id, id));
+    if (!match) return reply.status(404).send({ code: "NOT_FOUND", message: "No match" });
+    return match;
+  });
+
   app.get("/stages/:stageId/matches", async (req) => {
     const { stageId } = req.params as { stageId: string };
     return db

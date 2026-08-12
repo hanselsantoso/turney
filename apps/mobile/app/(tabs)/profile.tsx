@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
 import { usePlayerStats } from "../../src/api/hooks";
@@ -8,6 +9,7 @@ export default function Profile() {
   const user = useAuth((s) => s.user);
   const logout = useAuth((s) => s.logout);
   const stats = usePlayerStats(user?.id);
+  const router = useRouter();
 
   return (
     <ScrollView style={styles.wrap} contentContainerStyle={styles.content}>
@@ -66,6 +68,11 @@ export default function Profile() {
         ) : null}
       </Card>
 
+      <Button
+        title="Judge tools · scan player QR"
+        kind="secondary"
+        onPress={() => router.push("/judge/scan")}
+      />
       <Button title="Sign out" kind="secondary" onPress={logout} />
     </ScrollView>
   );
