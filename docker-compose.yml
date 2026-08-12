@@ -1,0 +1,20 @@
+# For machines without local Postgres. Local dev on this machine uses the
+# project-owned instance in .pgdata (port 5433) started via scripts/db.sh.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tm
+      POSTGRES_PASSWORD: tm_dev
+      POSTGRES_DB: tournament
+    ports: ["5433:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+  db_test:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tm
+      POSTGRES_PASSWORD: tm_dev
+      POSTGRES_DB: tournament_test
+    ports: ["5434:5432"]
+volumes:
+  pgdata:
