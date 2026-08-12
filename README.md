@@ -36,4 +36,18 @@ packages/shared   zod schemas, design tokens, pure logic (ELO, brackets, Swiss)
 
 ## Development
 
-Phase 1 not started yet. See [docs/plans/phase1-foundation.md](docs/plans/phase1-foundation.md) — requires Node 20+, pnpm, Docker.
+Requires Node 20+, pnpm 11, and either Homebrew `postgresql@16` or Docker.
+
+```bash
+pnpm install
+./scripts/db.sh init          # one-time: project-local Postgres on :5433 (.pgdata/)
+pnpm --filter @turney/api db:migrate
+pnpm --filter @turney/api db:seed        # admin@turney.id / turney-local-dev
+pnpm --filter @turney/api dev            # API on :3001
+pnpm --filter @turney/mobile web         # Expo web
+pnpm test                                # all suites
+```
+
+No Homebrew Postgres? `docker compose up -d` provides the same DBs on :5433/:5434.
+
+Phase 1 (auth + shells) complete. Phase 2 (tournament core) in progress.
