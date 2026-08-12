@@ -6,29 +6,33 @@ import { payments, registrations, tournaments, users } from "../db/schema";
 import { requireAuth } from "../lib/guards";
 import { canManageTournament } from "../lib/capabilities";
 
-async function withCapacity(tournamentId: string) {
+type CapacityError = { status: number; code: string; message: string; currentStatus?: string };
+type CapacityResult =
+  | { ok: false; error: CapacityError }
+  | { ok: true; tournament: typeof tournaments.$inferSelect };
+
+async function withCapacity(tournamentId: string): Promise<CapacityResult> {
   const [t] = await db.select().from(tournaments).where(eq(tournaments.id, tournamentId));
-  if (!t) return { error: { status: 404, code: "NOT_FOUND", message: "No tournament" } } as const;
+  if (!t) return { ok: false, error: { status: 404, code: "NOT_FOUND", message: "No tournament" } };
   if (t.status !== "reg_open") {
     return {
+      ok: false,
       error: {
         status: 409,
         code: "REG_CLOSED",
         message: "Registration is not open",
         currentStatus: t.status,
       },
-    } as const;
+    };
   }
   const [{ value: current }] = await db
     .select({ value: count() })
     .from(registrations)
-    .where(
-      and(eq(registrations.tournamentId, tournamentId)),
-    );
+    .where(and(eq(registrations.tournamentId, tournamentId)));
   if (current >= t.maxParticipants) {
-    return { error: { status: 409, code: "FULL", message: "Tournament is full" } } as const;
+    return { ok: false, error: { status: 409, code: "FULL", message: "Tournament is full" } };
   }
-  return { tournament: t } as const;
+  return { ok: true, tournament: t };
 }
 
 export async function registrationRoutes(app: FastifyInstance) {
@@ -38,7 +42,7 @@ export async function registrationRoutes(app: FastifyInstance) {
     async (req, reply) => {
       const { id } = req.params as { id: string };
       const cap = await withCapacity(id);
-      if ("error" in cap) return reply.status(cap.error.status).send(cap.error);
+      if (!cap.ok) return reply.status(cap.error.status).send(cap.error);
 
       const [row] = await db
         .insert(registrations)
@@ -64,7 +68,7 @@ export async function registrationRoutes(app: FastifyInstance) {
       return reply.status(403).send({ code: "FORBIDDEN", message: "Not a manager" });
     }
     const cap = await withCapacity(id);
-    if ("error" in cap) return reply.status(cap.error.status).send(cap.error);
+    if (!cap.ok) return reply.status(cap.error.status).send(cap.error);
 
     const [player] = await db
       .select()
