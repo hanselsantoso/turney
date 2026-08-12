@@ -177,6 +177,48 @@ export const groupMembers = pgTable(
   (t) => [unique().on(t.groupId, t.registrationId)],
 );
 
+export const matchBracketEnum = pgEnum("match_bracket", ["winners", "losers", "grand_final"]);
+export const matchStatusEnum = pgEnum("match_status", [
+  "pending",
+  "scheduled",
+  "in_progress",
+  "done",
+]);
+export const finishTypeEnum = pgEnum("finish_type", ["xtreme", "burst", "over", "spin"]);
+
+export const matches = pgTable("matches", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  stageId: uuid("stage_id").notNull().references(() => tournamentStages.id),
+  round: integer("round").notNull(),
+  bracketPos: integer("bracket_pos").notNull(),
+  bracket: matchBracketEnum("bracket").notNull().default("winners"),
+  groupId: uuid("group_id").references(() => groups.id),
+  p1RegId: uuid("p1_reg_id").references(() => registrations.id),
+  p2RegId: uuid("p2_reg_id").references(() => registrations.id),
+  winnerRegId: uuid("winner_reg_id").references(() => registrations.id),
+  status: matchStatusEnum("status").notNull().default("pending"),
+  stadiumId: uuid("stadium_id").references(() => stadiums.id),
+});
+
+export const battles = pgTable("battles", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  matchId: uuid("match_id").notNull().references(() => matches.id),
+  seq: integer("seq").notNull(),
+  winnerRegId: uuid("winner_reg_id").notNull().references(() => registrations.id),
+  finishType: finishTypeEnum("finish_type").notNull(),
+  points: integer("points").notNull(),
+});
+
+export const eloHistory = pgTable("elo_history", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id),
+  matchId: uuid("match_id").notNull().references(() => matches.id),
+  eloBefore: integer("elo_before").notNull(),
+  eloAfter: integer("elo_after").notNull(),
+  delta: integer("delta").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
 export const groupMoves = pgTable("group_moves", {
   id: uuid("id").primaryKey().defaultRandom(),
   groupIdFrom: uuid("group_id_from").references(() => groups.id),

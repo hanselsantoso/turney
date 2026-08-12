@@ -4,6 +4,7 @@ import { communityRoutes } from "./routes/communities";
 import { tournamentRoutes } from "./routes/tournaments";
 import { registrationRoutes } from "./routes/registrations";
 import { groupRoutes } from "./routes/groups";
+import { matchRoutes } from "./routes/matches";
 
 export function buildApp() {
   const app = Fastify({ logger: process.env.NODE_ENV !== "test" && !process.env.VITEST });
@@ -14,6 +15,7 @@ export function buildApp() {
   app.register(tournamentRoutes);
   app.register(registrationRoutes);
   app.register(groupRoutes);
+  app.register(matchRoutes);
 
   app.setErrorHandler((err, _req, reply) => {
     const e = err as { statusCode?: number; code?: string; message?: string };
