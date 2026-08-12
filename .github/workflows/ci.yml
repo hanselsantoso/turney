@@ -1,0 +1,36 @@
+name: ci
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: tm
+          POSTGRES_PASSWORD: tm_dev
+          POSTGRES_DB: tournament_test
+        ports: ["5433:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s
+          --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with: { version: 11 }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @turney/api db:migrate:test
+        env:
+          DATABASE_URL: postgres://tm:tm_dev@localhost:5433/tournament_test
+      - run: pnpm --filter @turney/shared exec tsc --noEmit
+      - run: pnpm --filter @turney/api exec tsc --noEmit
+      - run: pnpm --filter @turney/shared test
+      - run: pnpm --filter @turney/api test
+        env:
+          DATABASE_URL: postgres://tm:tm_dev@localhost:5433/tournament_test
+      - run: pnpm --filter @turney/mobile test
