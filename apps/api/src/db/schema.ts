@@ -7,6 +7,7 @@ import {
   boolean,
   jsonb,
   pgEnum,
+  real,
   unique,
 } from "drizzle-orm/pg-core";
 
@@ -134,6 +135,7 @@ export const registrations = pgTable(
     status: registrationStatusEnum("status").notNull().default("pending"),
     seed: integer("seed"),
     qrToken: uuid("qr_token").notNull().defaultRandom().unique(),
+    deckId: uuid("deck_id"),
     registeredBy: uuid("registered_by").references(() => users.id),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
@@ -176,6 +178,57 @@ export const groupMembers = pgTable(
   },
   (t) => [unique().on(t.groupId, t.registrationId)],
 );
+
+export const partKindEnum = pgEnum("part_kind", ["blade", "ratchet", "bit", "assist_blade"]);
+export const verificationStatusEnum = pgEnum("verification_status", ["approved", "rejected"]);
+
+export const parts = pgTable(
+  "parts",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    kind: partKindEnum("kind").notNull(),
+    name: text("name").notNull(),
+    alias: text("alias"),
+    attack: real("attack").notNull().default(0),
+    defense: real("defense").notNull().default(0),
+    stamina: real("stamina").notNull().default(0),
+    type: text("type"),
+    line: text("line"),
+    points: integer("points"),
+    extra: jsonb("extra"),
+    imageUrl: text("image_url"),
+  },
+  (t) => [unique().on(t.kind, t.name)],
+);
+
+export const decks = pgTable("decks", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: uuid("user_id").notNull().references(() => users.id),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const deckSlots = pgTable(
+  "deck_slots",
+  {
+    deckId: uuid("deck_id").notNull().references(() => decks.id),
+    slot: integer("slot").notNull(),
+    bladeId: uuid("blade_id").notNull().references(() => parts.id),
+    ratchetId: uuid("ratchet_id").notNull().references(() => parts.id),
+    bitId: uuid("bit_id").notNull().references(() => parts.id),
+    assistBladeId: uuid("assist_blade_id").references(() => parts.id),
+  },
+  (t) => [unique().on(t.deckId, t.slot)],
+);
+
+export const deckVerifications = pgTable("deck_verifications", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  registrationId: uuid("registration_id").notNull().references(() => registrations.id),
+  judgeId: uuid("judge_id").notNull().references(() => users.id),
+  status: verificationStatusEnum("status").notNull(),
+  notes: text("notes"),
+  verifiedAt: timestamp("verified_at").notNull().defaultNow(),
+});
 
 export const matchBracketEnum = pgEnum("match_bracket", ["winners", "losers", "grand_final"]);
 export const matchStatusEnum = pgEnum("match_status", [

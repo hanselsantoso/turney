@@ -1,0 +1,1541 @@
+{
+  "blades": [
+    {
+      "name": "Storm Spriggan",
+      "attack": 30,
+      "defense": 40,
+      "stamina": 30,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Dran Sword",
+      "attack": 60,
+      "defense": 30,
+      "stamina": 25,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Cobalt Dragoon",
+      "attack": 65,
+      "defense": 20,
+      "stamina": 30,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Whale Wave",
+      "attack": 50,
+      "defense": 40,
+      "stamina": 25,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Aero Pegasus",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Shark Edge",
+      "attack": 65,
+      "defense": 30,
+      "stamina": 20,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Tusk Mammoth",
+      "attack": 38,
+      "defense": 40,
+      "stamina": 37,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Hells Scythe",
+      "attack": 35,
+      "defense": 40,
+      "stamina": 40,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Dran Buster",
+      "attack": 75,
+      "defense": 25,
+      "stamina": 15,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Mummy Curse",
+      "attack": 30,
+      "defense": 60,
+      "stamina": 20,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Dran Dagger",
+      "attack": 50,
+      "defense": 25,
+      "stamina": 25,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Weiss Tiger",
+      "attack": 45,
+      "defense": 30,
+      "stamina": 25,
+      "type": "balance",
+      "line": "UX"
+    },
+    {
+      "name": "Dragoon Storm",
+      "attack": 55,
+      "defense": 30,
+      "stamina": 15,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Meteor Dragoon",
+      "attack": 75,
+      "defense": 15,
+      "stamina": 35,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Orochi Cluster",
+      "attack": 65,
+      "defense": 15,
+      "stamina": 20,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Golem Rock",
+      "attack": 35,
+      "defense": 65,
+      "stamina": 15,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Shark Gill",
+      "attack": 20,
+      "defense": 25,
+      "stamina": 55,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Wyvern Hover",
+      "attack": 13,
+      "defense": 60,
+      "stamina": 27,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Clock Mirage",
+      "attack": 10,
+      "defense": 10,
+      "stamina": 80,
+      "type": "stamina",
+      "line": "UX"
+    },
+    {
+      "name": "Cobalt Drake",
+      "attack": 70,
+      "defense": 35,
+      "stamina": 25,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Goat Tackle",
+      "attack": 13,
+      "defense": 65,
+      "stamina": 22,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Samurai Calibur",
+      "attack": 40,
+      "defense": 30,
+      "stamina": 30,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Shark Scale",
+      "attack": 70,
+      "defense": 15,
+      "stamina": 15,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Tyranno Roar",
+      "attack": 60,
+      "defense": 28,
+      "stamina": 12,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Black Shell",
+      "attack": 10,
+      "defense": 65,
+      "stamina": 25,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Rock Leone",
+      "attack": 30,
+      "defense": 55,
+      "stamina": 15,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Knight Mail",
+      "attack": 15,
+      "defense": 70,
+      "stamina": 40,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Tricera Press",
+      "attack": 20,
+      "defense": 65,
+      "stamina": 15,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Samurai Saber",
+      "attack": 70,
+      "defense": 25,
+      "stamina": 30,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Samurai Steel",
+      "attack": 45,
+      "defense": 42,
+      "stamina": 28,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Leon Crest",
+      "attack": 15,
+      "defense": 70,
+      "stamina": 15,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Phoenix Rudder",
+      "attack": 10,
+      "defense": 35,
+      "stamina": 55,
+      "type": "stamina",
+      "line": "UX"
+    },
+    {
+      "name": "Scorpio Spear",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "balance",
+      "line": "UX"
+    },
+    {
+      "name": "Xeno Xcalibur",
+      "attack": 65,
+      "defense": 25,
+      "stamina": 10,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Storm Pegasis",
+      "attack": 55,
+      "defense": 15,
+      "stamina": 30,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Victory Valkyrie",
+      "attack": 55,
+      "defense": 20,
+      "stamina": 25,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Phoenix Feather",
+      "attack": 55,
+      "defense": 25,
+      "stamina": 35,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Phoenix Wing",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Shelter Drake",
+      "attack": 25,
+      "defense": 40,
+      "stamina": 35,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Croc Crunch",
+      "attack": 65,
+      "defense": 27,
+      "stamina": 23,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Impact Drake",
+      "attack": 75,
+      "defense": 25,
+      "stamina": 10,
+      "type": "attack",
+      "line": "UX"
+    },
+    {
+      "name": "Ghost Circle",
+      "attack": 5,
+      "defense": 40,
+      "stamina": 55,
+      "type": "stamina",
+      "line": "UX"
+    },
+    {
+      "name": "Shinobi Shadow",
+      "attack": 10,
+      "defense": 70,
+      "stamina": 20,
+      "type": "defense",
+      "line": "UX"
+    },
+    {
+      "name": "Leon Claw",
+      "attack": 40,
+      "defense": 40,
+      "stamina": 20,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Wyvern Gale",
+      "attack": 10,
+      "defense": 40,
+      "stamina": 50,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Draciel Shield",
+      "attack": 30,
+      "defense": 50,
+      "stamina": 20,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "HellsHammer",
+      "attack": 55,
+      "defense": 30,
+      "stamina": 30,
+      "type": "balance",
+      "line": "UX"
+    },
+    {
+      "name": "Shinobi Knife",
+      "attack": 28,
+      "defense": 55,
+      "stamina": 32,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Crimson Garuda",
+      "attack": 45,
+      "defense": 25,
+      "stamina": 30,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Tyranno Beat",
+      "attack": 70,
+      "defense": 35,
+      "stamina": 10,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Ptera Swing",
+      "attack": 27,
+      "defense": 23,
+      "stamina": 50,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Bear Scratch",
+      "attack": 25,
+      "defense": 45,
+      "stamina": 30,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Silver Wolf",
+      "attack": 15,
+      "defense": 30,
+      "stamina": 65,
+      "type": "stamina",
+      "line": "UX"
+    },
+    {
+      "name": "Lightning L-Drago",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "attack",
+      "line": "BX"
+    },
+    {
+      "name": "Sphinx Cowl",
+      "attack": 35,
+      "defense": 55,
+      "stamina": 10,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Dranzer Spiral",
+      "attack": 35,
+      "defense": 30,
+      "stamina": 35,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Unicorn Sting",
+      "attack": 35,
+      "defense": 35,
+      "stamina": 30,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Wizard Rod",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "stamina",
+      "line": "UX"
+    },
+    {
+      "name": "Viper Tail",
+      "attack": 30,
+      "defense": 20,
+      "stamina": 50,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Hells Chain",
+      "attack": 40,
+      "defense": 45,
+      "stamina": 30,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Rhino Horn",
+      "attack": 20,
+      "defense": 50,
+      "stamina": 30,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Driger Slash",
+      "attack": 40,
+      "defense": 35,
+      "stamina": 25,
+      "type": "balance",
+      "line": "BX"
+    },
+    {
+      "name": "Hells Hammer",
+      "attack": 50,
+      "defense": 25,
+      "stamina": 25,
+      "type": "balance",
+      "line": "UX"
+    },
+    {
+      "name": "Knight Lance",
+      "attack": 25,
+      "defense": 60,
+      "stamina": 15,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Wizard Arrow",
+      "attack": 15,
+      "defense": 30,
+      "stamina": 55,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Knight Shield",
+      "attack": 20,
+      "defense": 55,
+      "stamina": 25,
+      "type": "defense",
+      "line": "BX"
+    },
+    {
+      "name": "Flare",
+      "attack": 25,
+      "defense": 40,
+      "stamina": 10,
+      "type": "defense",
+      "line": "CX"
+    },
+    {
+      "name": "Brush",
+      "attack": 40,
+      "defense": 15,
+      "stamina": 5,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Brave",
+      "attack": 40,
+      "defense": 10,
+      "stamina": 10,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Fang",
+      "attack": 35,
+      "defense": 10,
+      "stamina": 15,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Hunt",
+      "attack": 20,
+      "defense": 10,
+      "stamina": 30,
+      "type": "stamina",
+      "line": "CX"
+    },
+    {
+      "name": "Might",
+      "attack": 25,
+      "defense": 25,
+      "stamina": 25,
+      "type": "balance",
+      "line": "CX"
+    },
+    {
+      "name": "Eclipse",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "balance",
+      "line": "CX"
+    },
+    {
+      "name": "Arc",
+      "attack": 15,
+      "defense": 15,
+      "stamina": 45,
+      "type": "stamina",
+      "line": "CX"
+    },
+    {
+      "name": "Blast",
+      "attack": 50,
+      "defense": 10,
+      "stamina": 15,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Flame",
+      "attack": 5,
+      "defense": 15,
+      "stamina": 40,
+      "type": "stamina",
+      "line": "CX"
+    },
+    {
+      "name": "Dark",
+      "attack": 10,
+      "defense": 40,
+      "stamina": 10,
+      "type": "defense",
+      "line": "CX"
+    },
+    {
+      "name": "Volt",
+      "attack": 45,
+      "defense": 15,
+      "stamina": 15,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Reaper",
+      "attack": 25,
+      "defense": 10,
+      "stamina": 25,
+      "type": "balance",
+      "line": "CX"
+    },
+    {
+      "name": "Yell Kong",
+      "attack": 13,
+      "defense": 37,
+      "stamina": 50,
+      "type": "stamina",
+      "line": "BX"
+    },
+    {
+      "name": "Blitz",
+      "attack": 30,
+      "defense": 15,
+      "stamina": 10,
+      "type": "attack",
+      "line": "CX"
+    },
+    {
+      "name": "Fortress",
+      "attack": 10,
+      "defense": 20,
+      "stamina": 10,
+      "type": "defense",
+      "line": "CX"
+    },
+    {
+      "name": "Rage",
+      "attack": 10,
+      "defense": 10,
+      "stamina": 20,
+      "type": "stamina",
+      "line": "CX"
+    }
+  ],
+  "ratchets": [
+    {
+      "name": "Turbo (Ratchet Integrated Bit)",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "integratedBit": "Turbo"
+    },
+    {
+      "name": "Operate (Ratchet Integrated Bit)",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "integratedBit": "Operate"
+    },
+    {
+      "name": "1-50",
+      "attack": 18,
+      "defense": 9,
+      "stamina": 3,
+      "integratedBit": null
+    },
+    {
+      "name": "8-70",
+      "attack": 8,
+      "defense": 10,
+      "stamina": 12,
+      "integratedBit": null
+    },
+    {
+      "name": "4-55",
+      "attack": 7,
+      "defense": 11,
+      "stamina": 12,
+      "integratedBit": null
+    },
+    {
+      "name": "2-70",
+      "attack": 10,
+      "defense": 12,
+      "stamina": 8,
+      "integratedBit": null
+    },
+    {
+      "name": "1-60",
+      "attack": 17,
+      "defense": 9,
+      "stamina": 4,
+      "integratedBit": null
+    },
+    {
+      "name": "9-60",
+      "attack": 13,
+      "defense": 10,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "1-80",
+      "attack": 17,
+      "defense": 4,
+      "stamina": 9,
+      "integratedBit": null
+    },
+    {
+      "name": "3-70",
+      "attack": 15,
+      "defense": 8,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "9-80",
+      "attack": 13,
+      "defense": 10,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "4-70",
+      "attack": 11,
+      "defense": 12,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "7-60",
+      "attack": 8,
+      "defense": 14,
+      "stamina": 8,
+      "integratedBit": null
+    },
+    {
+      "name": "3-85",
+      "attack": 5,
+      "defense": 15,
+      "stamina": 10,
+      "integratedBit": null
+    },
+    {
+      "name": "2-80",
+      "attack": 10,
+      "defense": 11,
+      "stamina": 9,
+      "integratedBit": null
+    },
+    {
+      "name": "2-60",
+      "attack": 10,
+      "defense": 13,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "7-55",
+      "attack": 6,
+      "defense": 14,
+      "stamina": 10,
+      "integratedBit": null
+    },
+    {
+      "name": "4-60",
+      "attack": 11,
+      "defense": 13,
+      "stamina": 6,
+      "integratedBit": null
+    },
+    {
+      "name": "9-70",
+      "attack": 13,
+      "defense": 10,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "4-80",
+      "attack": 11,
+      "defense": 11,
+      "stamina": 8,
+      "integratedBit": null
+    },
+    {
+      "name": "6-60",
+      "attack": 14,
+      "defense": 8,
+      "stamina": 8,
+      "integratedBit": null
+    },
+    {
+      "name": "0-60",
+      "attack": 3,
+      "defense": 14,
+      "stamina": 13,
+      "integratedBit": null
+    },
+    {
+      "name": "M-85",
+      "attack": 8,
+      "defense": 19,
+      "stamina": 13,
+      "integratedBit": null
+    },
+    {
+      "name": "5-60",
+      "attack": 12,
+      "defense": 9,
+      "stamina": 9,
+      "integratedBit": null
+    },
+    {
+      "name": "9-65",
+      "attack": 13,
+      "defense": 10,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "7-70",
+      "attack": 8,
+      "defense": 12,
+      "stamina": 10,
+      "integratedBit": null
+    },
+    {
+      "name": "5-70",
+      "attack": 12,
+      "defense": 8.5,
+      "stamina": 9.5,
+      "integratedBit": null
+    },
+    {
+      "name": "6-70",
+      "attack": 14,
+      "defense": 7,
+      "stamina": 9,
+      "integratedBit": null
+    },
+    {
+      "name": "4-50",
+      "attack": 12,
+      "defense": 13,
+      "stamina": 5,
+      "integratedBit": null
+    },
+    {
+      "name": "1-70",
+      "attack": 17,
+      "defense": 6,
+      "stamina": 7,
+      "integratedBit": null
+    },
+    {
+      "name": "3-60",
+      "attack": 15,
+      "defense": 9,
+      "stamina": 6,
+      "integratedBit": null
+    },
+    {
+      "name": "5-80",
+      "attack": 12,
+      "defense": 8,
+      "stamina": 10,
+      "integratedBit": null
+    },
+    {
+      "name": "6-80",
+      "attack": 14,
+      "defense": 6,
+      "stamina": 10,
+      "integratedBit": null
+    },
+    {
+      "name": "0-80",
+      "attack": 3,
+      "defense": 12,
+      "stamina": 15,
+      "integratedBit": null
+    },
+    {
+      "name": "0-70",
+      "attack": 3,
+      "defense": 13,
+      "stamina": 14,
+      "integratedBit": null
+    },
+    {
+      "name": "7-80",
+      "attack": 7,
+      "defense": 14,
+      "stamina": 9,
+      "integratedBit": null
+    },
+    {
+      "name": "3-80",
+      "attack": 15,
+      "defense": 7,
+      "stamina": 8,
+      "integratedBit": null
+    }
+  ],
+  "bits": [
+    {
+      "name": "Ignition",
+      "alias": "I",
+      "attack": 50,
+      "defense": 15,
+      "stamina": 5,
+      "xDash": 30,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Under Needle",
+      "alias": "UN",
+      "attack": 10,
+      "defense": 60,
+      "stamina": 20,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Yield",
+      "alias": "Y",
+      "attack": 10,
+      "defense": 15,
+      "stamina": 65,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Merge",
+      "alias": "M",
+      "attack": 50,
+      "defense": 20,
+      "stamina": 10,
+      "xDash": 20,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Vortex",
+      "alias": "V",
+      "attack": 45,
+      "defense": 10,
+      "stamina": 5,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Flat",
+      "alias": "F",
+      "attack": 40,
+      "defense": 15,
+      "stamina": 10,
+      "xDash": 35,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Gear Flat",
+      "alias": "GF",
+      "attack": 50,
+      "defense": 5,
+      "stamina": 5,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Accel",
+      "alias": "A",
+      "attack": 40,
+      "defense": 10,
+      "stamina": 10,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Elevate",
+      "alias": "E",
+      "attack": 30,
+      "defense": 15,
+      "stamina": 20,
+      "xDash": 35,
+      "burstResistance": 30,
+      "type": "balance"
+    },
+    {
+      "name": "Spike",
+      "alias": "S",
+      "attack": 10,
+      "defense": 45,
+      "stamina": 35,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Gear Ball",
+      "alias": "GB",
+      "attack": 10,
+      "defense": 15,
+      "stamina": 45,
+      "xDash": 30,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Quake",
+      "alias": "Q",
+      "attack": 55,
+      "defense": 15,
+      "stamina": 5,
+      "xDash": 25,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Gear Point",
+      "alias": "GP",
+      "attack": 30,
+      "defense": 25,
+      "stamina": 15,
+      "xDash": 30,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Wall Wedge",
+      "alias": "WW",
+      "attack": 5,
+      "defense": 60,
+      "stamina": 25,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Orb",
+      "alias": "O",
+      "attack": 10,
+      "defense": 30,
+      "stamina": 50,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Dot",
+      "alias": "D",
+      "attack": 10,
+      "defense": 55,
+      "stamina": 25,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Wedge",
+      "alias": "W",
+      "attack": 5,
+      "defense": 55,
+      "stamina": 30,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Cyclone",
+      "alias": "C",
+      "attack": 40,
+      "defense": 5,
+      "stamina": 10,
+      "xDash": 45,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Trans Point",
+      "alias": "TP",
+      "attack": 35,
+      "defense": 25,
+      "stamina": 25,
+      "xDash": 15,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Glide",
+      "alias": "G",
+      "attack": 20,
+      "defense": 10,
+      "stamina": 55,
+      "xDash": 15,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Low Rush",
+      "alias": "LR",
+      "attack": 45,
+      "defense": 5,
+      "stamina": 15,
+      "xDash": 35,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Rubber Accel",
+      "alias": "RA",
+      "attack": 60,
+      "defense": 17,
+      "stamina": 3,
+      "xDash": 20,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Jolt",
+      "alias": "J",
+      "attack": 35,
+      "defense": 10,
+      "stamina": 15,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Taper",
+      "alias": "T",
+      "attack": 35,
+      "defense": 20,
+      "stamina": 20,
+      "xDash": 25,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Ball",
+      "alias": "B",
+      "attack": 15,
+      "defense": 25,
+      "stamina": 50,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Needle",
+      "alias": "N",
+      "attack": 10,
+      "defense": 50,
+      "stamina": 30,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Low Flat",
+      "alias": "LF",
+      "attack": 45,
+      "defense": 5,
+      "stamina": 10,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Point",
+      "alias": "P",
+      "attack": 25,
+      "defense": 25,
+      "stamina": 25,
+      "xDash": 25,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Disc Ball",
+      "alias": "DB",
+      "attack": 15,
+      "defense": 20,
+      "stamina": 55,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Operate",
+      "alias": "Op",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "balance"
+    },
+    {
+      "name": "High Needle",
+      "alias": "HN",
+      "attack": 15,
+      "defense": 55,
+      "stamina": 20,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Free Ball",
+      "alias": "FB",
+      "attack": 10,
+      "defense": 25,
+      "stamina": 60,
+      "xDash": 5,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Gear Needle",
+      "alias": "GN",
+      "attack": 20,
+      "defense": 40,
+      "stamina": 10,
+      "xDash": 30,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Rush",
+      "alias": "R",
+      "attack": 40,
+      "defense": 10,
+      "stamina": 20,
+      "xDash": 30,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Trans Kick",
+      "alias": "TK",
+      "attack": 35,
+      "defense": 30,
+      "stamina": 20,
+      "xDash": 15,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Low Orb",
+      "alias": "LO",
+      "attack": 5,
+      "defense": 25,
+      "stamina": 55,
+      "xDash": 15,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "Under Flat",
+      "alias": "UF",
+      "attack": 55,
+      "defense": 5,
+      "stamina": 5,
+      "xDash": 35,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Level",
+      "alias": "L",
+      "attack": 40,
+      "defense": 5,
+      "stamina": 15,
+      "xDash": 40,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Turbo",
+      "alias": "Tr",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "attack"
+    },
+    {
+      "name": "Wall Ball",
+      "alias": "WB",
+      "attack": 15,
+      "defense": 30,
+      "stamina": 45,
+      "xDash": 10,
+      "burstResistance": 30,
+      "type": "stamina"
+    },
+    {
+      "name": "High Taper",
+      "alias": "HT",
+      "attack": 30,
+      "defense": 25,
+      "stamina": 20,
+      "xDash": 25,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Metal Needle",
+      "alias": "MN",
+      "attack": 8,
+      "defense": 57,
+      "stamina": 30,
+      "xDash": 5,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Bound Spike",
+      "alias": "BS",
+      "attack": 5,
+      "defense": 60,
+      "stamina": 30,
+      "xDash": 5,
+      "burstResistance": 30,
+      "type": "defense"
+    },
+    {
+      "name": "Kick",
+      "alias": "K",
+      "attack": 35,
+      "defense": 25,
+      "stamina": 15,
+      "xDash": 25,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Gear Rush",
+      "alias": "GR",
+      "attack": 45,
+      "defense": 10,
+      "stamina": 10,
+      "xDash": 35,
+      "burstResistance": 80,
+      "type": "attack"
+    },
+    {
+      "name": "Unite",
+      "alias": "U",
+      "attack": 25,
+      "defense": 25,
+      "stamina": 30,
+      "xDash": 20,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Zap",
+      "alias": "Z",
+      "attack": 30,
+      "defense": 20,
+      "stamina": 15,
+      "xDash": 35,
+      "burstResistance": 80,
+      "type": "balance"
+    },
+    {
+      "name": "Hexa",
+      "alias": "H",
+      "attack": 30,
+      "defense": 35,
+      "stamina": 20,
+      "xDash": 15,
+      "burstResistance": 80,
+      "type": "balance"
+    }
+  ],
+  "assistBlades": [
+    {
+      "name": "Knuckle",
+      "alias": "K",
+      "attack": 30,
+      "defense": 5,
+      "stamina": 5,
+      "type": "attack"
+    },
+    {
+      "name": "Vertical",
+      "alias": "V",
+      "attack": 10,
+      "defense": 25,
+      "stamina": 5,
+      "type": "defense"
+    },
+    {
+      "name": "Erase",
+      "alias": "E",
+      "attack": 10,
+      "defense": 5,
+      "stamina": 25,
+      "type": "stamina"
+    },
+    {
+      "name": "Zillion",
+      "alias": "Z",
+      "attack": 22,
+      "defense": 15,
+      "stamina": 3,
+      "type": "defense"
+    },
+    {
+      "name": "Massive",
+      "alias": "M",
+      "attack": 15,
+      "defense": 15,
+      "stamina": 10,
+      "type": "balance"
+    },
+    {
+      "name": "Charge",
+      "alias": "C",
+      "attack": 15,
+      "defense": 20,
+      "stamina": 5,
+      "type": "defense"
+    },
+    {
+      "name": "Turn",
+      "alias": "T",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "balance"
+    },
+    {
+      "name": "Free",
+      "alias": "F",
+      "attack": 5,
+      "defense": 20,
+      "stamina": 25,
+      "type": "stamina"
+    },
+    {
+      "name": "Heavy",
+      "alias": "H",
+      "attack": 17,
+      "defense": 17,
+      "stamina": 11,
+      "type": "balance"
+    },
+    {
+      "name": "Dual",
+      "alias": "D",
+      "attack": 0,
+      "defense": 0,
+      "stamina": 0,
+      "type": "balance"
+    },
+    {
+      "name": "Round",
+      "alias": "R",
+      "attack": 10,
+      "defense": 10,
+      "stamina": 20,
+      "type": "stamina"
+    },
+    {
+      "name": "Jaggy",
+      "alias": "J",
+      "attack": 20,
+      "defense": 15,
+      "stamina": 5,
+      "type": "attack"
+    },
+    {
+      "name": "Assault",
+      "alias": "A",
+      "attack": 25,
+      "defense": 10,
+      "stamina": 5,
+      "type": "attack"
+    },
+    {
+      "name": "Wheel",
+      "alias": "W",
+      "attack": 5,
+      "defense": 15,
+      "stamina": 20,
+      "type": "stamina"
+    },
+    {
+      "name": "Slash",
+      "alias": "S",
+      "attack": 20,
+      "defense": 10,
+      "stamina": 10,
+      "type": "attack"
+    },
+    {
+      "name": "Bumper",
+      "alias": "B",
+      "attack": 10,
+      "defense": 20,
+      "stamina": 10,
+      "type": "defense"
+    }
+  ]
+}

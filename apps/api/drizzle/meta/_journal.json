@@ -22,6 +22,20 @@
       "when": 1786554008909,
       "tag": "0002_flashy_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786554333968,
+      "tag": "0003_glossy_starhawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786554373839,
+      "tag": "0004_silent_imperial_guard",
+      "breakpoints": true
     }
   ]
 }
