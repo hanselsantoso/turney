@@ -8,7 +8,7 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:migrate:test": "DATABASE_URL=postgres://tm@localhost:5433/tournament_test drizzle-kit migrate",
+    "db:migrate:test": "DATABASE_URL=\"${DATABASE_URL:-postgres://tm@localhost:5433/tournament_test}\" drizzle-kit migrate",
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
