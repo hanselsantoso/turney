@@ -12,6 +12,21 @@ import { paymentRoutes } from "./routes/payments";
 export function buildApp() {
   const app = Fastify({ logger: process.env.NODE_ENV !== "test" && !process.env.VITEST });
 
+  /* Clients send content-type: application/json on bodyless POSTs (check-in,
+     register). Treat an empty body as {} instead of a 400. */
+  app.addContentTypeParser(
+    "application/json",
+    { parseAs: "string" },
+    (_req, body, done) => {
+      if (body === "" || body == null) return done(null, {});
+      try {
+        done(null, JSON.parse(body as string));
+      } catch (e) {
+        done(e as Error, undefined);
+      }
+    },
+  );
+
   app.get("/health", async () => ({ status: "ok" }));
   app.register(authRoutes);
   app.register(communityRoutes);
