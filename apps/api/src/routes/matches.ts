@@ -244,7 +244,15 @@ export async function matchRoutes(app: FastifyInstance) {
       return { match: updated, elo };
     });
 
-    app.io?.to(`tournament:${match.stageId}`).emit("match:updated", { matchId: match.id });
+    const [stageRow] = await db
+      .select({ tournamentId: tournamentStages.tournamentId })
+      .from(tournamentStages)
+      .where(eq(tournamentStages.id, match.stageId));
+    if (stageRow) {
+      app.io
+        ?.to(`tournament:${stageRow.tournamentId}`)
+        .emit("match:updated", { matchId: match.id, stageId: match.stageId });
+    }
     return result;
   });
 }
