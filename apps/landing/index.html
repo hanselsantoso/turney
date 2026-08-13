@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Turney — Where Champions Are Made</title>
+<meta name="description" content="Beyblade X tournaments with live brackets, ELO rankings, and real prize pools. Jakarta and beyond.">
+<style>
+  :root{
+    --bg:#0c0d10; --surface:#14161b; --surface2:#1c1f26; --border:#272b33;
+    --text:#f2f3f5; --dim:#9aa1ad; --accent:#a06bff; --live:#ff4655; --win:#2fd47a;
+    --a14:color-mix(in srgb,var(--accent) 14%,transparent);
+    --a33:color-mix(in srgb,var(--accent) 33%,transparent);
+    --a55:color-mix(in srgb,var(--accent) 55%,transparent);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:
+    radial-gradient(1100px 480px at 62% -10%, var(--a33), transparent 60%),
+    radial-gradient(700px 320px at 12% 108%, var(--a14), transparent 60%),
+    var(--bg);
+    color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100vh}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  nav{display:flex;align-items:center;gap:26px;padding:20px 0;border-bottom:1px solid #272b3388}
+  .wm{font-weight:800;letter-spacing:.16em;font-size:15px}
+  .wm b{color:var(--accent)}
+  nav .cta{margin-left:auto;background:var(--accent);color:var(--bg);font-weight:800;font-size:12px;
+           letter-spacing:.08em;padding:10px 22px;text-decoration:none;
+           clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:30px;align-items:center;padding:64px 0 44px}
+  .eyebrow{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.3em;color:var(--accent);margin-bottom:16px}
+  h1{font-size:clamp(44px,7vw,76px);font-weight:900;line-height:.92;letter-spacing:-.02em;
+     text-transform:uppercase;transform:scaleX(.92);transform-origin:left}
+  h1 .acc{color:var(--accent);text-shadow:0 0 44px var(--a55)}
+  .sub{max-width:42ch;color:var(--dim);font-size:15px;margin:22px 0 28px;line-height:1.55}
+  .ctas{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+  .main-cta{background:var(--accent);color:var(--bg);font-weight:800;letter-spacing:.06em;font-size:14px;
+            padding:16px 36px;text-decoration:none;clip-path:polygon(12px 0,100% 0,calc(100% - 12px) 100%,0 100%);
+            box-shadow:0 0 30px var(--a33)}
+  .sec-cta{color:var(--text);font-weight:700;font-size:13px;text-decoration:none;border-bottom:2px solid var(--a55);padding-bottom:2px}
+  /* CSS bey clash (lightweight, no WebGL) */
+  .stage{position:relative;height:340px}
+  .bey{position:absolute;width:180px;height:180px;perspective:600px}
+  .beyA{left:6%;top:96px}.beyB{right:6%;top:40px}
+  .tilt{position:absolute;inset:0;transform:rotateX(54deg)}
+  .spin{position:absolute;inset:0;border-radius:50%;animation:spin .55s linear infinite;
+        background:
+          radial-gradient(circle at 38% 34%, #3a3f4c, #232733 45%, #101319 100%);
+        border:2px solid var(--accent);
+        box-shadow:0 0 24px var(--a33), inset 0 0 30px #00000088}
+  .spin::before{content:"";position:absolute;inset:16%;border-radius:50%;border:2px solid var(--a55)}
+  .spin::after{content:"X";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+               color:var(--accent);font-weight:900;font-family:ui-monospace,monospace;font-size:22px}
+  .beyB .spin{border-color:var(--live);box-shadow:0 0 24px #ff465533, inset 0 0 30px #00000088;animation-direction:reverse}
+  .beyB .spin::before{border-color:#ff465588}.beyB .spin::after{color:var(--live)}
+  .trail{position:absolute;inset:6%;border-radius:50%;filter:blur(7px);opacity:.8;
+         background:conic-gradient(transparent 0 210deg, var(--a33) 300deg, var(--accent) 345deg, transparent 360deg);
+         animation:spin .9s linear infinite}
+  .beyB .trail{background:conic-gradient(transparent 0 210deg, #ff465533 300deg, var(--live) 345deg, transparent 360deg);animation-direction:reverse}
+  .flash{position:absolute;left:50%;top:52%;width:60px;height:60px;transform:translate(-50%,-50%);border-radius:50%;
+         background:radial-gradient(circle,#ffffffcc,var(--a55) 40%,transparent 70%);animation:flash .9s ease-out infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes flash{0%,42%{opacity:0;transform:translate(-50%,-50%) scale(.3)}48%{opacity:1;transform:translate(-50%,-50%) scale(1)}70%,100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
+  .stats{display:flex;border-top:1px solid #272b3388;border-bottom:1px solid #272b3388}
+  .stat{flex:1;padding:22px 8px;text-align:center;border-right:1px solid #272b3388}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;font-family:ui-monospace,monospace;font-size:28px;color:var(--accent)}
+  .stat span{font-size:10px;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:40px 0 60px}
+  .feat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;
+        clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px)}
+  .feat h3{font-size:15px;margin-bottom:8px}
+  .feat p{color:var(--dim);font-size:13px;line-height:1.5}
+  footer{padding:26px 0;color:var(--dim);font-size:12px;display:flex;justify-content:space-between;border-top:1px solid #272b3388}
+  @media (max-width:840px){
+    .hero{grid-template-columns:1fr;padding-top:40px}
+    .stage{height:260px;order:2}
+    .bey{width:130px;height:130px}
+    .feats{grid-template-columns:1fr}
+    .stats{flex-wrap:wrap}.stat{flex:1 1 50%}
+  }
+  @media (prefers-reduced-motion:reduce){.spin,.trail,.flash{animation:none}.flash{opacity:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <span class="wm">TUR<b>NEY</b></span>
+    <a class="cta" href="/app">OPEN APP</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">3 · 2 · 1 ···</div>
+      <h1>Where<br>champions<br><span class="acc">are made</span></h1>
+      <p class="sub">Beyblade X tournaments with live brackets, ELO rankings, deck verification, and real prize pools. Run by communities, for communities.</p>
+      <div class="ctas">
+        <a class="main-cta" href="/app">JOIN THE ARENA</a>
+        <a class="sec-cta" href="#features">HOW IT WORKS</a>
+      </div>
+    </div>
+    <div class="stage" role="img" aria-label="two beyblades clashing">
+      <div class="bey beyA"><div class="tilt"><div class="trail"></div><div class="spin"></div></div></div>
+      <div class="bey beyB"><div class="tilt"><div class="trail"></div><div class="spin"></div></div></div>
+      <div class="flash"></div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><b>4</b><span>Bracket formats</span></div>
+    <div class="stat"><b>184</b><span>Parts in catalog</span></div>
+    <div class="stat"><b>ELO</b><span>Live ranking</span></div>
+    <div class="stat"><b>QR</b><span>Venue check-in</span></div>
+  </section>
+
+  <section class="feats" id="features">
+    <div class="feat">
+      <h3>Multi-stage formats</h3>
+      <p>Round robin groups into double elimination into a single-elim final. Each stage picks its own scoring. Any combination, Challonge-style.</p>
+    </div>
+    <div class="feat">
+      <h3>Everyone is a player</h3>
+      <p>Judges and organizers play too. Staff roles are per-tournament grants, and nobody ever judges their own match.</p>
+    </div>
+    <div class="feat">
+      <h3>Community-run</h3>
+      <p>Leaders host events in their own colors, take payments in-app or cash on the spot, and move players between groups when reality happens.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>turney.id</span>
+    <span>Built for the Beyblade X community</span>
+  </footer>
+</div>
+</body>
+</html>
