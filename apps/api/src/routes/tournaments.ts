@@ -8,7 +8,13 @@ import {
   type TournamentStatus,
 } from "@turney/shared";
 import { db } from "../db/client";
-import { tournaments, tournamentStages, tournamentStaff } from "../db/schema";
+import {
+  registrations,
+  tournaments,
+  tournamentStages,
+  tournamentStaff,
+  users,
+} from "../db/schema";
 import { requireAuth } from "../lib/guards";
 import { canCreateTournamentIn, canManageTournament } from "../lib/capabilities";
 import { slugify } from "../lib/slug";
@@ -102,6 +108,24 @@ export async function tournamentRoutes(app: FastifyInstance) {
       .onConflictDoNothing()
       .returning();
     return reply.status(201).send(row ?? { code: "ALREADY_GRANTED" });
+  });
+
+  /* participants: registrations joined with player identity, for brackets/standings */
+  app.get("/tournaments/:id/participants", async (req) => {
+    const { id } = req.params as { id: string };
+    return db
+      .select({
+        registrationId: registrations.id,
+        userId: users.id,
+        displayName: users.displayName,
+        playerCode: users.playerCode,
+        elo: users.elo,
+        seed: registrations.seed,
+        status: registrations.status,
+      })
+      .from(registrations)
+      .innerJoin(users, eq(registrations.userId, users.id))
+      .where(eq(registrations.tournamentId, id));
   });
 
   app.get("/tournaments/:id/staff", async (req) => {

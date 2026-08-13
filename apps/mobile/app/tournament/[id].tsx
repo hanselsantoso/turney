@@ -1,5 +1,5 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
 import { useMyRegistrations, useRegister, useTournament } from "../../src/api/hooks";
@@ -14,6 +14,7 @@ const FORMAT_LABEL: Record<string, string> = {
 
 export default function TournamentDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const router = useRouter();
   const user = useAuth((s) => s.user);
   const { data: t } = useTournament(id);
   const regs = useMyRegistrations(id);
@@ -117,6 +118,18 @@ export default function TournamentDetail() {
           </Text>
         </Card>
       ) : null}
+
+      {mine ? (
+        <Button
+          title="My tournament dashboard"
+          onPress={() => router.push(`/tournament/dashboard/${id}`)}
+        />
+      ) : null}
+      <Button
+        title="View bracket"
+        kind="secondary"
+        onPress={() => router.push(`/tournament/bracket/${id}`)}
+      />
 
       {canRegister ? (
         <Button
