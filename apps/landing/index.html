@@ -66,6 +66,19 @@
   .rail b{display:block;font-family:ui-monospace,monospace;font-size:26px;color:var(--accent)}
   .rail span{font-size:9px;letter-spacing:.18em;color:var(--dim)}
 
+  /* plasma burst ornaments (procedural, sit behind the bey) */
+  .burst{position:absolute;z-index:11;pointer-events:none;border-radius:50%;
+         background:
+           radial-gradient(circle, var(--a55) 0%, transparent 62%),
+           conic-gradient(from 0deg, transparent 0 14deg, var(--a33) 15deg 17deg, transparent 18deg 96deg,
+             var(--a33) 97deg 99deg, transparent 100deg 178deg, var(--a33) 179deg 181deg, transparent 182deg 266deg,
+             var(--a33) 267deg 269deg, transparent 270deg 360deg);
+         filter:blur(1px);opacity:.8;animation:burstspin 26s linear infinite;will-change:transform}
+  .burst::after{content:"";position:absolute;inset:18%;border-radius:50%;
+                border:1px solid var(--a33);box-shadow:0 0 60px var(--a33) inset}
+  @keyframes burstspin{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.burst{animation:none}}
+
   /* debris shards: parallax layers */
   .shard{position:absolute;z-index:11;background:var(--accent);opacity:.55;will-change:transform}
   .shard.red{background:var(--live)}
@@ -182,6 +195,7 @@
       <div class="r"><b>ELO</b><span>LIVE<br>RANKING</span></div>
     </div>
 
+    <div class="burst" data-plx="0.1" style="right:2vw;top:18%;width:46vmin;height:46vmin"></div>
     <i class="shard"     data-plx="0.35" style="left:12%;top:22%;width:10px;height:10px;transform:rotate(24deg)"></i>
     <i class="shard red" data-plx="0.5"  style="left:56%;top:16%;width:6px;height:18px;transform:rotate(-32deg)"></i>
     <i class="shard wht" data-plx="0.28" style="left:70%;top:70%;width:14px;height:5px;transform:rotate(40deg)"></i>
@@ -243,6 +257,7 @@
   </section>
 
   <section class="final">
+    <div class="burst" style="left:50%;top:50%;width:70vmin;height:70vmin;transform:translate(-50%,-50%)"></div>
     <div class="wrap inner">
       <div class="eyebrow" data-reveal>3 · 2 · 1 ···</div>
       <h2 data-reveal>GO <span class="acc">SHOOT</span></h2>
@@ -4267,14 +4282,16 @@ const PEGASUS_B64="Z2xURgIAAAA4VgsAlAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
      The bey travels through keyframes as the page scrolls; DOM layers move
      at their data-plx speeds. One rAF loop drives everything (no scroll
      listeners), values are lerped for weight. */
+  /* Smaller blade, aggressive attack lean on the hero (empty right side
+     of the title is its perch), slow spin at rest. */
   const KEYS = [
     /* progress, x,     y,     scale, tiltZ */
-    [0.0,        2.1,  -0.1,   1.0,   0.16],  /* hero: right of type   */
-    [0.22,       2.1,  -0.1,   1.0,   0.16],
-    [0.38,      -1.9,  -0.3,   0.8,  -0.12],  /* features: drift left  */
-    [0.58,       0.0,  -0.2,   1.25,  0.05],  /* formats: center stage */
-    [0.78,       1.6,  -0.4,   0.7,  -0.18],  /* communities: aside    */
-    [1.0,        0.0,   0.1,   1.5,   0.0],   /* finale: big center    */
+    [0.0,        2.2,   0.15,  0.78,  0.34],  /* hero: perched right, leaning in */
+    [0.22,       2.2,   0.15,  0.78,  0.34],
+    [0.38,      -1.9,  -0.3,   0.62, -0.12],  /* features: drift left  */
+    [0.58,       0.0,  -0.2,   0.95,  0.05],  /* formats: center stage */
+    [0.78,       1.6,  -0.4,   0.55, -0.18],  /* communities: aside    */
+    [1.0,        0.0,   0.1,   1.15,  0.0],   /* finale: big center    */
   ];
   function sample(p) {
     let a = KEYS[0], b = KEYS[KEYS.length - 1];
@@ -4321,8 +4338,12 @@ const PEGASUS_B64="Z2xURgIAAAA4VgsAlAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
     bey.position.set(k.x, k.y, 0);
     bey.scale.setScalar(k.s);
     bey.rotation.z = k.z;
-    bey.rotation.x = 0.5;                    /* cool angle, always */
-    spinGrp.rotation.y = smooth * 0.006 + now * 0.35; /* scroll-scrub + idle drift */
+    /* attack posture: leans hard toward the viewer, breathing slightly,
+       strongest on the hero perch and relaxing as it travels */
+    const lean = 0.72 - p * 0.25;
+    bey.rotation.x = lean + Math.sin(now * 1.1) * 0.04;
+    /* spin on the vertical axis: slow at rest, whipped by scroll */
+    spinGrp.rotation.y = smooth * 0.006 + now * 0.25;
 
     for (const { el, speed } of plxEls) {
       el.style.transform = `translateY(${(-smooth * speed).toFixed(1)}px)`;
