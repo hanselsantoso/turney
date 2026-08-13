@@ -3,7 +3,7 @@ import { useRouter } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
 import { useCommunities, useTournaments } from "../../src/api/hooks";
-import { Card, Chip, SectionLabel } from "../../src/ui";
+import { Banner, Card, Chip, Display, SectionLabel } from "../../src/ui";
 
 const fmtRp = (n: number) => (n > 0 ? `Rp ${n.toLocaleString("id-ID")}` : "Free");
 
@@ -34,22 +34,26 @@ export default function Home() {
 
           {featured ? (
             <Pressable onPress={() => router.push(`/tournament/${featured.id}`)}>
-              <View style={styles.banner}>
+              <Banner>
                 <Chip
-                  label={featured.status === "reg_open" ? "FEATURED · REG OPEN" : "FEATURED"}
+                  label={featured.status === "reg_open" ? "FEATURED · REG OPEN" : "FEATURED · LIVE"}
                   tone={featured.status === "in_progress" ? "live" : "accent"}
+                  glowing={featured.status === "in_progress"}
                 />
-                <Text style={styles.bannerTitle}>{featured.name.toUpperCase()}</Text>
+                <View style={{ minHeight: 44, justifyContent: "flex-end" }}>
+                  <Display size={28} accentLast>
+                    {featured.name}
+                  </Display>
+                </View>
                 <Text style={styles.bannerMeta}>
-                  {new Date(featured.startsAt).toLocaleDateString("id-ID", {
-                    weekday: "short",
-                    day: "numeric",
-                    month: "short",
-                  })}
+                  {new Date(featured.startsAt)
+                    .toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" })
+                    .toUpperCase()}
                   {"  ·  "}
-                  {fmtRp(featured.entryFee)}
+                  {fmtRp(featured.entryFee).toUpperCase()}
+                  {"  ·  TAP TO VIEW"}
                 </Text>
-              </View>
+              </Banner>
             </Pressable>
           ) : (
             <Card style={{ padding: 16 }}>
@@ -113,18 +117,12 @@ const styles = StyleSheet.create({
   hello: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
   welcome: { color: tokens.color.textDim, fontSize: 12.5 },
   name: { color: tokens.color.text, fontSize: 26, fontWeight: "800" },
-  banner: {
-    borderRadius: tokens.radius.md,
-    borderWidth: 1,
-    borderColor: `${tokens.color.accent}55`,
-    backgroundColor: tokens.color.surface,
-    padding: 16,
-    gap: 8,
-    minHeight: 120,
-    justifyContent: "flex-end",
+  bannerMeta: {
+    color: tokens.color.textDim,
+    fontSize: 10.5,
+    letterSpacing: 1.2,
+    fontVariant: ["tabular-nums"],
   },
-  bannerTitle: { color: tokens.color.text, fontSize: 24, fontWeight: "900", letterSpacing: -0.5 },
-  bannerMeta: { color: tokens.color.textDim, fontSize: 11.5, letterSpacing: 1 },
   empty: { color: tokens.color.textDim, fontSize: 13.5, lineHeight: 19 },
   comCard: { flexDirection: "row", alignItems: "center", gap: 12, padding: 13 },
   comMark: {

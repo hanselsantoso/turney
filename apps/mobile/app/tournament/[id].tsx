@@ -3,7 +3,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
 import { useMyRegistrations, useRegister, useTournament } from "../../src/api/hooks";
-import { Button, Card, Chip, SectionLabel } from "../../src/ui";
+import { Banner, Button, Card, Chip, Display, SectionLabel } from "../../src/ui";
 
 const FORMAT_LABEL: Record<string, string> = {
   round_robin: "Round Robin",
@@ -34,12 +34,15 @@ export default function TournamentDetail() {
   return (
     <ScrollView style={styles.wrap} contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title: t.name }} />
-      <View style={styles.hero}>
+      <Banner>
         <Chip
           label={t.status.replace("_", " ").toUpperCase()}
           tone={t.status === "in_progress" ? "live" : t.status === "reg_open" ? "accent" : "dim"}
+          glowing={t.status === "in_progress"}
         />
-        <Text style={styles.title}>{t.name.toUpperCase()}</Text>
+        <Display size={30} accentLast>
+          {t.name}
+        </Display>
         <Text style={styles.meta}>
           {new Date(t.startsAt).toLocaleDateString("id-ID", {
             weekday: "long",
@@ -51,7 +54,7 @@ export default function TournamentDetail() {
           {"  ·  max "}
           {t.maxParticipants}
         </Text>
-      </View>
+      </Banner>
 
       {t.prizePool?.length ? (
         <>
@@ -139,15 +142,6 @@ const styles = StyleSheet.create({
   wrap: { flex: 1, backgroundColor: tokens.color.bg },
   center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: tokens.color.bg },
   content: { padding: 16, gap: 12, paddingBottom: 40 },
-  hero: {
-    borderRadius: tokens.radius.md,
-    borderWidth: 1,
-    borderColor: `${tokens.color.accent}33`,
-    backgroundColor: tokens.color.surface,
-    padding: 16,
-    gap: 8,
-  },
-  title: { color: tokens.color.text, fontSize: 26, fontWeight: "900", letterSpacing: -0.5 },
   meta: { color: tokens.color.textDim, fontSize: 12.5 },
   prizeRow: {
     flexDirection: "row",
