@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Platform, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { tokens } from "@turney/shared";
 import { api } from "../../src/api/client";
 import { useAuth } from "../../src/stores/auth";
 import { Button, Card, Chip, SectionLabel } from "../../src/ui";
 
-/* MVP: manual QR-token entry (works on web + native).
-   expo-camera scanner slots in here later; resolve path is identical. */
+/* Native: live camera QR scan. Web + fallback: manual token entry.
+   Both feed the same /qr/resolve path. */
 
 type Resolved = {
   registration: { id: string; status: string; tournamentId: string };
@@ -22,14 +23,23 @@ export default function JudgeScan() {
   const [found, setFound] = useState<Resolved | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [camOn, setCamOn] = useState(false);
+  const [perm, requestPerm] = useCameraPermissions();
 
-  async function resolve() {
+  async function onBarcode(data: string) {
+    if (busy || !data) return;
+    setCamOn(false);
+    setQr(data);
+    await resolveToken(data);
+  }
+
+  async function resolveToken(value: string) {
     setError(null);
     setBusy(true);
     try {
       const r = (await api(
         "/qr/resolve",
-        { method: "POST", body: JSON.stringify({ qrToken: qr.trim() }) },
+        { method: "POST", body: JSON.stringify({ qrToken: value.trim() }) },
         token,
       )) as Resolved;
       setFound(r);
@@ -39,6 +49,10 @@ export default function JudgeScan() {
     } finally {
       setBusy(false);
     }
+  }
+
+  async function resolve() {
+    await resolveToken(qr);
   }
 
   async function verify(status: "approved" | "rejected") {
@@ -63,7 +77,34 @@ export default function JudgeScan() {
   return (
     <ScrollView style={styles.wrap} contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title: "Judge · Scan" }} />
-      <SectionLabel>Player QR token</SectionLabel>
+
+      {Platform.OS !== "web" ? (
+        camOn && perm?.granted ? (
+          <View style={styles.camWrap}>
+            <CameraView
+              style={styles.cam}
+              barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+              onBarcodeScanned={(e) => onBarcode(e.data)}
+            />
+            <Button title="Stop camera" kind="secondary" onPress={() => setCamOn(false)} />
+          </View>
+        ) : (
+          <Button
+            title="Scan with camera"
+            onPress={async () => {
+              if (!perm?.granted) {
+                const r = await requestPerm();
+                if (!r.granted) return setError("Camera permission denied");
+              }
+              setCamOn(true);
+            }}
+          />
+        )
+      ) : null}
+
+      <SectionLabel>
+        {Platform.OS === "web" ? "Player QR token" : "Or enter token manually"}
+      </SectionLabel>
       <TextInput
         style={styles.input}
         placeholder="Paste or type the QR token"
@@ -135,4 +176,6 @@ const styles = StyleSheet.create({
   },
   error: { color: tokens.color.live, fontSize: 12.5 },
   deck: { color: tokens.color.text, fontSize: 13.5 },
+  camWrap: { gap: 10 },
+  cam: { height: 280, borderRadius: tokens.radius.md, overflow: "hidden" },
 });
