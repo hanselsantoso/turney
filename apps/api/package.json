@@ -12,6 +12,7 @@
     "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
+    "@fastify/cors": "^11.3.0",
     "@turney/shared": "workspace:*",
     "argon2": "^0.41.0",
     "drizzle-orm": "^0.38.0",

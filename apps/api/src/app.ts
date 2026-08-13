@@ -1,4 +1,5 @@
 import Fastify from "fastify";
+import cors from "@fastify/cors";
 import { authRoutes } from "./routes/auth";
 import { communityRoutes } from "./routes/communities";
 import { tournamentRoutes } from "./routes/tournaments";
@@ -11,6 +12,12 @@ import { paymentRoutes } from "./routes/payments";
 
 export function buildApp() {
   const app = Fastify({ logger: process.env.NODE_ENV !== "test" && !process.env.VITEST });
+
+  /* Browser clients (Expo web on :8081, later turney.id) call cross-origin.
+     Dev: allow all. Production: lock via CORS_ORIGIN env (comma-separated). */
+  app.register(cors, {
+    origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : true,
+  });
 
   /* Clients send content-type: application/json on bodyless POSTs (check-in,
      register). Treat an empty body as {} instead of a 400. */
