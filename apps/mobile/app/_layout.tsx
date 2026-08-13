@@ -14,9 +14,12 @@ export default function Root() {
 
   useEffect(() => {
     const inAuthGroup = segments[0] === "(auth)";
+    const onOnboarding = (segments as string[])[1] === "onboarding";
     if (!user && !inAuthGroup) {
       router.replace("/login");
-    } else if (user && inAuthGroup) {
+    } else if (user && !user.onboardedAt && !onOnboarding) {
+      router.replace("/onboarding");
+    } else if (user && user.onboardedAt && inAuthGroup) {
       router.replace("/home");
     }
   }, [user, segments, router]);

@@ -10,6 +10,7 @@ import { statsRoutes } from "./routes/stats";
 import { deckRoutes } from "./routes/decks";
 import { paymentRoutes } from "./routes/payments";
 import { stageRoutes } from "./routes/stages";
+import { userRoutes } from "./routes/users";
 
 export function buildApp() {
   const app = Fastify({ logger: process.env.NODE_ENV !== "test" && !process.env.VITEST });
@@ -46,6 +47,7 @@ export function buildApp() {
   app.register(deckRoutes);
   app.register(paymentRoutes);
   app.register(stageRoutes);
+  app.register(userRoutes);
 
   app.setErrorHandler((err, _req, reply) => {
     const e = err as { statusCode?: number; code?: string; message?: string };

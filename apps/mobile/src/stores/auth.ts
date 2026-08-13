@@ -8,6 +8,7 @@ type AuthState = {
   refreshToken: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, displayName: string) => Promise<void>;
+  setUser: (user: PublicUser) => void;
   logout: () => void;
 };
 
@@ -29,6 +30,7 @@ export const useAuth = create<AuthState>((set, get) => ({
     });
     set({ user: data.user, accessToken: data.accessToken, refreshToken: data.refreshToken });
   },
+  setUser: (user) => set({ user }),
   logout: () => {
     const rt = get().refreshToken;
     if (rt) {

@@ -13,7 +13,10 @@ async function main() {
   const password = process.env.SEED_ADMIN_PASSWORD ?? "turney-local-dev";
   const passwordHash = await argon2.hash(password, { type: argon2.argon2id });
   for (const u of seedUsers) {
-    await db.insert(users).values({ ...u, passwordHash }).onConflictDoNothing({ target: users.email });
+    await db
+      .insert(users)
+      .values({ ...u, passwordHash, onboardedAt: new Date() })
+      .onConflictDoNothing({ target: users.email });
   }
   console.log(`Seeded ${seedUsers.length} users (password: ${password})`);
   await sql.end();

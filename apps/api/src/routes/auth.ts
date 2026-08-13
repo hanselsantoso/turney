@@ -19,6 +19,8 @@ function toPublic(user: typeof users.$inferSelect) {
     playerCode: user.playerCode,
     elo: user.elo,
     city: user.city,
+    region: user.region,
+    onboardedAt: user.onboardedAt?.toISOString() ?? null,
   });
 }
 
