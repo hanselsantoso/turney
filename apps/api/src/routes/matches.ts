@@ -177,6 +177,15 @@ export async function matchRoutes(app: FastifyInstance) {
     const gate = await scoringGate(req.auth!.sub, match);
     if (gate) return reply.status(gate.status).send(gate);
 
+    const [stageRow] = await db
+      .select()
+      .from(tournamentStages)
+      .where(eq(tournamentStages.id, match.stageId));
+    /* winner slot-advance is an elimination-bracket concept; round robin and
+       swiss pairings are fixed/paired-per-round and must never be overwritten */
+    const isElimination =
+      stageRow?.format === "single_elim" || stageRow?.format === "double_elim";
+
     const rows = await db.select().from(battles).where(eq(battles.matchId, match.id));
     const score = new Map<string, number>();
     for (const b of rows) score.set(b.winnerRegId, (score.get(b.winnerRegId) ?? 0) + b.points);
@@ -230,7 +239,7 @@ export async function matchRoutes(app: FastifyInstance) {
         .returning();
 
       /* advance winner into next round slot (elimination brackets) */
-      if (match.bracket === "winners") {
+      if (isElimination && match.bracket === "winners") {
         const nextPos = Math.ceil(match.bracketPos / 2);
         const [next] = await tx
           .select()
@@ -251,10 +260,6 @@ export async function matchRoutes(app: FastifyInstance) {
       return { match: updated, elo };
     });
 
-    const [stageRow] = await db
-      .select({ tournamentId: tournamentStages.tournamentId })
-      .from(tournamentStages)
-      .where(eq(tournamentStages.id, match.stageId));
     if (stageRow) {
       app.io
         ?.to(`tournament:${stageRow.tournamentId}`)

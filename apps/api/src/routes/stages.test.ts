@@ -126,12 +126,13 @@ describe("standings + stage advancement", () => {
         [loser, "spin"],
         [winner, "spin"],
       ] as const) {
-        await app.inject({
+        const b = await app.inject({
           method: "POST",
           url: `/matches/${m.id}/battles`,
           headers: bearer(leader),
           payload: { winnerRegId: who, finishType: finish },
         });
+        expect(b.statusCode).toBe(201);
       }
       const fin = await app.inject({
         method: "POST",
