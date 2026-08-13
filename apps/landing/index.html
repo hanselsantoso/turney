@@ -4267,16 +4267,14 @@ const PEGASUS_B64="Z2xURgIAAABkWA0AkAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
      The bey travels through keyframes as the page scrolls; DOM layers move
      at their data-plx speeds. One rAF loop drives everything (no scroll
      listeners), values are lerped for weight. */
-  /* Rest beside the headline; first scroll wakes the journey; it ends
-     parked at the side of the CREATE YOUR ACCOUNT button, idling slowly. */
   const KEYS = [
     /* progress, x,     y,     scale, tiltZ */
-    [0.0,        2.1,   0.15,  1.05,  0.16],  /* beside WHERE CHAMPIONS...  */
-    [0.14,       2.1,   0.15,  1.05,  0.16],  /* hold until scrolling begins*/
-    [0.38,      -1.9,   0.0,   0.85, -0.12],  /* features: crosses left     */
-    [0.58,       0.05, -0.25,  1.2,   0.05],  /* formats: center stage      */
-    [0.78,       1.7,  -0.35,  0.8,  -0.16],  /* communities: drifts right  */
-    [1.0,        1.9,  -0.15,  1.0,   0.1],   /* parked beside the CTA      */
+    [0.0,        2.1,  -0.1,   1.0,   0.16],  /* hero: right of type   */
+    [0.22,       2.1,  -0.1,   1.0,   0.16],
+    [0.38,      -1.9,  -0.3,   0.8,  -0.12],  /* features: drift left  */
+    [0.58,       0.0,  -0.2,   1.25,  0.05],  /* formats: center stage */
+    [0.78,       1.6,  -0.4,   0.7,  -0.18],  /* communities: aside    */
+    [1.0,        0.0,   0.1,   1.5,   0.0],   /* finale: big center    */
   ];
   function sample(p) {
     let a = KEYS[0], b = KEYS[KEYS.length - 1];
@@ -4300,7 +4298,6 @@ const PEGASUS_B64="Z2xURgIAAABkWA0AkAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
   }));
 
   let smooth = 0;
-  let spin = 0;
   function resize() {
     renderer.setSize(innerWidth, innerHeight, false);
     camera.aspect = innerWidth / innerHeight;
@@ -4317,20 +4314,16 @@ const PEGASUS_B64="Z2xURgIAAABkWA0AkAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
 
     const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
     const target = window.scrollY;
-    const before = smooth;
     smooth += (target - smooth) * Math.min(1, dt * 6); /* weighty lag */
     const p = Math.min(1, smooth / max);
 
+    /* the ask: the bey follows the scroll, slowly */
     const k = sample(p);
     bey.position.set(k.x, k.y, 0);
     bey.scale.setScalar(k.s);
     bey.rotation.z = k.z;
-    bey.rotation.x = 0.5;                    /* cool angle, always */
-    /* velocity-based spin: scrolling whips it up, at rest it idles slowly.
-       That covers both asks: parallax begins when scrolling begins, and the
-       final parking spot beside the CTA spins gently. */
-    spin += dt * 0.45 + Math.abs(smooth - before) * 0.008;
-    spinGrp.rotation.y = spin;
+    bey.rotation.x = 0.5;                    /* cool angle, always     */
+    spinGrp.rotation.y = smooth * 0.006 + now * 0.35; /* scroll-scrub + idle drift */
 
     for (const { el, speed } of plxEls) {
       el.style.transform = `translateY(${(-smooth * speed).toFixed(1)}px)`;
@@ -4340,7 +4333,7 @@ const PEGASUS_B64="Z2xURgIAAABkWA0AkAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
     if (!reduce) requestAnimationFrame(frame);
   }
   if (reduce) {
-    bey.position.set(2.1, 0.15, 0);
+    bey.position.set(2.1, -0.1, 0);
     bey.rotation.x = 0.5;
     setTimeout(() => renderer.render(scene, camera), 700);
   } else {
