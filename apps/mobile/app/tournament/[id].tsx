@@ -110,12 +110,16 @@ export default function TournamentDetail() {
               You are registered
             </Text>
           </View>
-          <Text style={styles.qrHint}>
-            Entry QR token: show this at the venue{"\n"}
-            <Text style={{ color: tokens.color.accent, fontVariant: ["tabular-nums"] }}>
-              {mine.qrToken}
-            </Text>
-          </Text>
+          <Button
+            title="Show my entry QR"
+            kind="secondary"
+            onPress={() =>
+              router.push({
+                pathname: "/ticket/[regId]",
+                params: { regId: mine.id, qrToken: mine.qrToken, name: t.name, status: mine.status },
+              })
+            }
+          />
         </Card>
       ) : null}
 

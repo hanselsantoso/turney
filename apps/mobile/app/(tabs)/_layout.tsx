@@ -28,9 +28,10 @@ export default function TabsLayout() {
         name="tournaments"
         options={{ title: "Tournaments", tabBarIcon: icon("▦") }}
       />
+      <Tabs.Screen name="decks" options={{ title: "Decks", tabBarIcon: icon("◎") }} />
       <Tabs.Screen
         name="leaderboard"
-        options={{ title: "Leaderboard", tabBarIcon: icon("◇") }}
+        options={{ title: "Rank", tabBarIcon: icon("◇") }}
       />
       <Tabs.Screen name="profile" options={{ title: "Profile", tabBarIcon: icon("◉") }} />
     </Tabs>
