@@ -2,6 +2,8 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { api } from "../../src/api/client";
 import { useMyRegistrations, useRegister, useTournament } from "../../src/api/hooks";
 import { useCommunityAccent } from "../../src/theme";
 import { Banner, Button, Card, Chip, Display, SectionLabel } from "../../src/ui";
@@ -24,6 +26,19 @@ export default function TournamentDetail() {
   const mine = (regs.data ?? []).find((r) => r.userId === user?.id);
   const canRegister = t?.status === "reg_open" && !mine;
   const accent = useCommunityAccent(t?.communityId);
+  const qc = useQueryClient();
+  const token = useAuth((s) => s.accessToken);
+  const myDecks = useQuery<Array<{ id: string; name: string }>>({
+    queryKey: ["decks"],
+    queryFn: () => api("/decks", {}, token),
+    enabled: !!mine && !!token,
+  });
+  const mineDeckId = (mine as { deckId?: string } | undefined)?.deckId;
+
+  async function attachDeck(deckId: string) {
+    await api(`/registrations/${mine!.id}/deck`, { method: "PUT", body: JSON.stringify({ deckId }) }, token);
+    qc.invalidateQueries({ queryKey: ["registrations", id] });
+  }
 
   if (!t) {
     return (
@@ -114,6 +129,30 @@ export default function TournamentDetail() {
                 : "You are registered"}
             </Text>
           </View>
+          {!mineDeckId ? (
+            (myDecks.data ?? []).length > 0 ? (
+              <>
+                <Text style={{ color: tokens.color.textDim, fontSize: 12 }}>
+                  Attach a deck for verification:
+                </Text>
+                {(myDecks.data ?? []).slice(0, 3).map((d) => (
+                  <Button
+                    key={d.id}
+                    title={`Use "${d.name}"`}
+                    kind="secondary"
+                    onPress={() => attachDeck(d.id)}
+                  />
+                ))}
+              </>
+            ) : (
+              <Text style={{ color: tokens.color.textDim, fontSize: 12 }}>
+                No deck yet. Build one in the Decks tab, then attach it here for judge
+                verification.
+              </Text>
+            )
+          ) : (
+            <Chip label="DECK ATTACHED" tone="win" />
+          )}
           <Button
             title="Show my entry QR"
             kind="secondary"
