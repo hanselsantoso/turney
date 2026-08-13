@@ -265,6 +265,18 @@ export default function ManageTournament() {
               {p.displayName}
             </Text>
             <Text style={styles.pCode}>{p.playerCode}</Text>
+            {p.status === "pending" ? (
+              <Text
+                style={styles.cashBtn}
+                onPress={() =>
+                  act(() =>
+                    api(`/registrations/${p.registrationId}/record-cash`, { method: "POST" }, token),
+                  )
+                }
+              >
+                MARK PAID
+              </Text>
+            ) : null}
             <Chip
               label={p.status.replace("_", " ").toUpperCase()}
               tone={p.status === "checked_in" || p.status === "paid" ? "win" : p.status === "cancelled" ? "live" : "amber"}
@@ -315,5 +327,6 @@ const styles = StyleSheet.create({
   },
   pName: { color: tokens.color.text, fontWeight: "600", flex: 1, fontSize: 13.5 },
   pCode: { color: tokens.color.textDim, fontSize: 11.5, fontVariant: ["tabular-nums"] },
+  cashBtn: { color: tokens.color.accent, fontSize: 10.5, fontWeight: "800", letterSpacing: 0.6 },
   error: { color: tokens.color.live, fontSize: 12.5, textAlign: "center" },
 });

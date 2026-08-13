@@ -44,9 +44,15 @@ export async function registrationRoutes(app: FastifyInstance) {
       const cap = await withCapacity(id);
       if (!cap.ok) return reply.status(cap.error.status).send(cap.error);
 
+      /* Free tournaments confirm instantly; paid ones sit pending until
+         cash is recorded at the venue (or a gateway settles it later). */
       const [row] = await db
         .insert(registrations)
-        .values({ tournamentId: id, userId: req.auth!.sub })
+        .values({
+          tournamentId: id,
+          userId: req.auth!.sub,
+          status: cap.tournament.entryFee === 0 ? "paid" : "pending",
+        })
         .onConflictDoNothing()
         .returning();
       if (!row) {
@@ -55,6 +61,45 @@ export async function registrationRoutes(app: FastifyInstance) {
           .send({ code: "ALREADY_REGISTERED", message: "Already registered" });
       }
       return reply.status(201).send(row);
+    },
+  );
+
+  /* Staff records a cash payment for an existing pending registration. */
+  app.post(
+    "/registrations/:id/record-cash",
+    { preHandler: [requireAuth] },
+    async (req, reply) => {
+      const { id } = req.params as { id: string };
+      const [reg] = await db.select().from(registrations).where(eq(registrations.id, id));
+      if (!reg) return reply.status(404).send({ code: "NOT_FOUND", message: "No registration" });
+      if (!(await canManageTournament(req.auth!.sub, reg.tournamentId)))
+        return reply.status(403).send({ code: "FORBIDDEN", message: "Not a manager" });
+      if (reg.status === "paid" || reg.status === "checked_in")
+        return reply.status(409).send({ code: "ALREADY_PAID", message: "Already settled" });
+
+      const [t] = await db.select().from(tournaments).where(eq(tournaments.id, reg.tournamentId));
+      const { amount } = (req.body ?? {}) as { amount?: number };
+
+      const result = await db.transaction(async (tx) => {
+        const [payment] = await tx
+          .insert(payments)
+          .values({
+            registrationId: reg.id,
+            method: "cash",
+            amount: amount ?? t?.entryFee ?? 0,
+            status: "settlement",
+            recordedBy: req.auth!.sub,
+            paidAt: new Date(),
+          })
+          .returning();
+        const [updated] = await tx
+          .update(registrations)
+          .set({ status: "paid" })
+          .where(eq(registrations.id, reg.id))
+          .returning();
+        return { payment, registration: updated };
+      });
+      return reply.status(201).send(result);
     },
   );
 

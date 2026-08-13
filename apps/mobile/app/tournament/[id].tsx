@@ -109,7 +109,9 @@ export default function TournamentDetail() {
               tone={mine.status === "checked_in" ? "win" : mine.status === "paid" ? "win" : "accent"}
             />
             <Text style={{ color: tokens.color.textDim, fontSize: 12.5 }}>
-              You are registered
+              {mine.status === "pending" && t.entryFee > 0
+                ? `Registered · pay Rp ${t.entryFee.toLocaleString("id-ID")} cash at the venue`
+                : "You are registered"}
             </Text>
           </View>
           <Button
