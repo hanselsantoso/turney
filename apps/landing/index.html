@@ -4286,14 +4286,18 @@ const PEGASUS_B64="Z2xURgIAAAA4VgsAlAcAAEpTT057ImFzc2V0Ijp7ImdlbmVyYXRvciI6ImdsV
   const PHASE = Math.PI / 2; /* start dead-center over the big word */
 
   function parkWorld() {
-    const el = document.getElementById("park");
-    if (!el) return { x: 1.6, y: -0.4 };
+    /* park directly beside the CREATE YOUR ACCOUNT button: a bey-width to
+       its right, vertically centered on it (clamped inside the viewport) */
+    const el = document.getElementById("register-cta");
+    if (!el) return { x: 1.4, y: -0.3 };
     const r = el.getBoundingClientRect();
-    const cx = ((r.left + r.right) / 2 / innerWidth) * 2 - 1;
-    const cy = -(((r.top + r.bottom) / 2 / innerHeight) * 2 - 1);
+    const px = Math.min(r.right + 150, innerWidth - 170);
+    const py = (r.top + r.bottom) / 2;
+    const cx = (px / innerWidth) * 2 - 1;
+    const cy = -((py / innerHeight) * 2 - 1);
     const halfH = Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
     const halfW = halfH * camera.aspect;
-    return { x: cx * halfW, y: cy * halfH + camera.position.y * 0.12 };
+    return { x: cx * halfW, y: camera.position.y + cy * halfH };
   }
 
   let smooth = 0;
