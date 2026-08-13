@@ -47,6 +47,14 @@ export default function TournamentDashboard() {
     enabled: !!stage,
     refetchInterval: 10000,
   });
+  const standings = useQuery<
+    Array<{ registrationId: string; displayName: string; wins: number; losses: number; points: number }>
+  >({
+    queryKey: ["standings", stage?.id],
+    queryFn: () => api(`/stages/${stage!.id}/standings`),
+    enabled: !!stage,
+    refetchInterval: 15000,
+  });
 
   const myReg = participants.data?.find((p) => p.userId === user?.id);
   const mine = (matches.data ?? []).filter(
@@ -112,6 +120,33 @@ export default function TournamentDashboard() {
         {mine.length === 0 ? <Text style={styles.emptyRow}>Nothing scheduled yet</Text> : null}
       </Card>
 
+      <SectionLabel>{`${stage?.name ?? "Stage"} standings${stage?.format === "round_robin" || stage?.format === "swiss" ? " · live" : ""}`}</SectionLabel>
+      <Card>
+        {(standings.data ?? []).slice(0, 8).map((s, i) => (
+          <View key={s.registrationId} style={styles.row}>
+            <Text style={styles.rd}>{i + 1}</Text>
+            <Text
+              style={[
+                styles.opp,
+                s.registrationId === myReg?.registrationId && {
+                  color: tokens.color.accent,
+                  fontWeight: "800",
+                },
+              ]}
+              numberOfLines={1}
+            >
+              {s.displayName}
+            </Text>
+            <Text style={styles.pts}>
+              {s.wins}-{s.losses} · {s.points} pts
+            </Text>
+          </View>
+        ))}
+        {(standings.data ?? []).length === 0 ? (
+          <Text style={styles.emptyRow}>No results yet</Text>
+        ) : null}
+      </Card>
+
       <Button title="View full bracket" kind="secondary" onPress={() => router.push(`/tournament/bracket/${id}`)} />
     </ScrollView>
   );
@@ -148,4 +183,5 @@ const styles = StyleSheet.create({
   rd: { color: tokens.color.textDim, width: 30, fontWeight: "700", fontVariant: ["tabular-nums"] },
   opp: { color: tokens.color.text, flex: 1, fontSize: 13 },
   emptyRow: { color: tokens.color.textDim, padding: 14, fontSize: 13 },
+  pts: { color: tokens.color.textDim, fontSize: 12, fontVariant: ["tabular-nums"] },
 });

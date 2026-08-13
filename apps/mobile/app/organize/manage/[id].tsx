@@ -89,6 +89,24 @@ export default function ManageTournament() {
       qc.invalidateQueries({ queryKey: ["matches", stageId] });
     });
 
+  const [advanceResult, setAdvanceResult] = useState<string | null>(null);
+  const advance = (stageId: string) =>
+    act(async () => {
+      const r = await api(`/stages/${stageId}/advance`, { method: "POST" }, token);
+      setAdvanceResult(
+        r.stage === "final"
+          ? `CHAMPION: ${r.champion?.displayName ?? "?"} 🏆`
+          : `Advanced ${r.advancers.length} players to next stage`,
+      );
+      qc.invalidateQueries({ queryKey: ["matches"] });
+    });
+
+  const pairNext = (stageId: string) =>
+    act(async () => {
+      await api(`/stages/${stageId}/pair-next`, { method: "POST" }, token);
+      qc.invalidateQueries({ queryKey: ["matches", stageId] });
+    });
+
   const addArena = () =>
     act(() =>
       api(
@@ -204,6 +222,28 @@ export default function ManageTournament() {
                   onPress={() => generate(s.id)}
                   disabled={busy}
                 />
+              ) : s.status === "active" ? (
+                <>
+                  <Button
+                    title="View bracket"
+                    kind="secondary"
+                    onPress={() => router.push(`/tournament/bracket/${id}`)}
+                  />
+                  {s.format === "swiss" ? (
+                    <Button
+                      title="Pair next round"
+                      kind="secondary"
+                      onPress={() => pairNext(s.id)}
+                      disabled={busy}
+                    />
+                  ) : null}
+                  <Button
+                    title="Advance stage (close + seed next)"
+                    kind="danger"
+                    onPress={() => advance(s.id)}
+                    disabled={busy}
+                  />
+                </>
               ) : (
                 <Button
                   title="View bracket"
@@ -236,6 +276,13 @@ export default function ManageTournament() {
         ) : null}
       </Card>
 
+      {advanceResult ? (
+        <Card style={{ padding: 14 }}>
+          <Text style={{ color: tokens.color.win, fontWeight: "800", textAlign: "center" }}>
+            {advanceResult}
+          </Text>
+        </Card>
+      ) : null}
       {error ? <Text style={styles.error}>{error}</Text> : null}
     </ScrollView>
   );
