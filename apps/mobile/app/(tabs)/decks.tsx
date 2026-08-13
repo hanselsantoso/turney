@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   FlatList,
+  Image,
   Modal,
   Pressable,
   ScrollView,
@@ -24,7 +25,9 @@ type Part = {
   defense: number;
   stamina: number;
   type: string | null;
+  line: string | null;
   points: number | null;
+  imageUrl: string | null;
 };
 type SlotDraft = { bladeId?: string; ratchetId?: string; bitId?: string };
 type Deck = {
@@ -43,6 +46,8 @@ export default function Decks() {
   const [slots, setSlots] = useState<SlotDraft[]>([{}, {}, {}]);
   const [picker, setPicker] = useState<{ slot: number; kind: keyof typeof KIND_LABEL } | null>(null);
   const [search, setSearch] = useState("");
+  const [line, setLine] = useState<string | null>(null);
+  const [ptype, setPtype] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const parts = useQuery<Part[]>({ queryKey: ["parts"], queryFn: () => api("/parts") });
@@ -53,13 +58,25 @@ export default function Decks() {
   });
 
   const byId = useMemo(() => new Map((parts.data ?? []).map((p) => [p.id, p])), [parts.data]);
+  const kindParts = useMemo(
+    () => (picker ? (parts.data ?? []).filter((p) => p.kind === picker.kind) : []),
+    [parts.data, picker],
+  );
+  const lines = useMemo(
+    () => [...new Set(kindParts.map((p) => p.line).filter(Boolean))].sort() as string[],
+    [kindParts],
+  );
+  const types = useMemo(
+    () => [...new Set(kindParts.map((p) => p.type).filter(Boolean))].sort() as string[],
+    [kindParts],
+  );
   const pickerParts = useMemo(() => {
-    if (!picker) return [];
     const q = search.trim().toLowerCase();
-    return (parts.data ?? [])
-      .filter((p) => p.kind === picker.kind)
+    return kindParts
+      .filter((p) => !line || p.line === line)
+      .filter((p) => !ptype || p.type === ptype)
       .filter((p) => !q || p.name.toLowerCase().includes(q));
-  }, [parts.data, picker, search]);
+  }, [kindParts, search, line, ptype]);
 
   const complete = slots.every((s) => s.bladeId && s.ratchetId && s.bitId);
 
@@ -91,11 +108,16 @@ export default function Decks() {
         style={[styles.partRow, !part && styles.partRowEmpty]}
         onPress={() => {
           setSearch("");
+          setLine(null);
+          setPtype(null);
           setPicker({ slot, kind });
         }}
       >
         {part ? (
           <>
+            {part.imageUrl ? (
+              <Image source={{ uri: part.imageUrl }} style={styles.partImgSm} />
+            ) : null}
             <Text style={styles.partName}>{part.name}</Text>
             <StatBars p={part} />
           </>
@@ -170,6 +192,26 @@ export default function Decks() {
               value={search}
               onChangeText={setSearch}
             />
+            {lines.length > 1 ? (
+              <View style={styles.filterRow}>
+                <FilterPill label="ALL" on={!line} onPress={() => setLine(null)} />
+                {lines.map((l) => (
+                  <FilterPill key={l} label={l.toUpperCase()} on={line === l} onPress={() => setLine(line === l ? null : l)} />
+                ))}
+              </View>
+            ) : null}
+            {types.length > 1 ? (
+              <View style={styles.filterRow}>
+                {types.map((ty) => (
+                  <FilterPill
+                    key={ty}
+                    label={ty.toUpperCase()}
+                    on={ptype === ty}
+                    onPress={() => setPtype(ptype === ty ? null : ty)}
+                  />
+                ))}
+              </View>
+            ) : null}
             <FlatList
               data={pickerParts}
               keyExtractor={(p) => p.id}
@@ -187,9 +229,21 @@ export default function Decks() {
                     setPicker(null);
                   }}
                 >
+                  {item.imageUrl ? (
+                    <Image source={{ uri: item.imageUrl }} style={styles.partImg} />
+                  ) : (
+                    <View style={[styles.partImg, styles.partImgEmpty]}>
+                      <Text style={{ color: tokens.color.textDim, fontSize: 9 }}>
+                        {item.name.slice(0, 2).toUpperCase()}
+                      </Text>
+                    </View>
+                  )}
                   <View style={{ flex: 1 }}>
                     <Text style={styles.partName}>{item.name}</Text>
-                    {item.type ? <Chip label={item.type.toUpperCase()} tone="dim" /> : null}
+                    <View style={{ flexDirection: "row", gap: 6 }}>
+                      {item.line ? <Chip label={item.line.toUpperCase()} tone="accent" /> : null}
+                      {item.type ? <Chip label={item.type.toUpperCase()} tone="dim" /> : null}
+                    </View>
                   </View>
                   <StatBars p={item} />
                 </Pressable>
@@ -199,6 +253,14 @@ export default function Decks() {
         </View>
       </Modal>
     </ScrollView>
+  );
+}
+
+function FilterPill({ label, on, onPress }: { label: string; on: boolean; onPress: () => void }) {
+  return (
+    <Pressable style={[styles.fpill, on && styles.fpillOn]} onPress={onPress}>
+      <Text style={[styles.fpillText, on && styles.fpillTextOn]}>{label}</Text>
+    </Pressable>
   );
 }
 
@@ -275,4 +337,23 @@ const styles = StyleSheet.create({
     borderBottomColor: tokens.color.surface2,
   },
   error: { color: tokens.color.live, fontSize: 12.5, textAlign: "center" },
+  filterRow: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
+  fpill: {
+    borderWidth: 1,
+    borderColor: tokens.color.border,
+    borderRadius: tokens.radius.pill,
+    paddingHorizontal: 11,
+    paddingVertical: 5,
+  },
+  fpillOn: { borderColor: tokens.color.accent, backgroundColor: `${tokens.color.accent}14` },
+  fpillText: { color: tokens.color.textDim, fontSize: 10.5, fontWeight: "700", letterSpacing: 0.4 },
+  fpillTextOn: { color: tokens.color.accent },
+  partImg: { width: 40, height: 40, borderRadius: 8, backgroundColor: tokens.color.surface2 },
+  partImgSm: { width: 28, height: 28, borderRadius: 6, backgroundColor: tokens.color.surface },
+  partImgEmpty: {
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: tokens.color.border,
+  },
 });
