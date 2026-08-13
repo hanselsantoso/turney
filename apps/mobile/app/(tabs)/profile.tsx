@@ -69,6 +69,11 @@ export default function Profile() {
       </Card>
 
       <Button
+        title="Organizer · run tournaments"
+        kind="secondary"
+        onPress={() => router.push("/organize")}
+      />
+      <Button
         title="Judge tools · scan player QR"
         kind="secondary"
         onPress={() => router.push("/judge/scan")}
