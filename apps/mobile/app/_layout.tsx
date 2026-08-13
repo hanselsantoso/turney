@@ -12,22 +12,26 @@ export default function Root() {
   const segments = useSegments();
   const router = useRouter();
 
+  const segs = segments as string[];
+  const isLanding = segs.length === 0 || segs[0] === "index";
+
   useEffect(() => {
-    const inAuthGroup = segments[0] === "(auth)";
-    const onOnboarding = (segments as string[])[1] === "onboarding";
-    if (!user && !inAuthGroup) {
+    const inAuthGroup = segs[0] === "(auth)";
+    const onOnboarding = segs[1] === "onboarding";
+    /* web guests may browse the landing page; everything else needs auth */
+    if (!user && !inAuthGroup && !(isLanding && Platform.OS === "web")) {
       router.replace("/login");
     } else if (user && !user.onboardedAt && !onOnboarding) {
       router.replace("/onboarding");
     } else if (user && user.onboardedAt && inAuthGroup) {
       router.replace("/home");
     }
-  }, [user, segments, router]);
+  }, [user, segs, isLanding, router]);
 
   return (
     <QueryClientProvider client={qc}>
       <View style={styles.outer}>
-        <View style={styles.frame}>
+        <View style={[styles.frame, isLanding && Platform.OS === "web" && styles.frameWide]}>
           <Stack
             screenOptions={{
               headerStyle: { backgroundColor: tokens.color.surface },
@@ -64,4 +68,6 @@ const styles = StyleSheet.create({
         }
       : null),
   },
+  /* the landing page is a website, not a phone frame */
+  frameWide: { maxWidth: 1140, borderLeftWidth: 0, borderRightWidth: 0 },
 });
