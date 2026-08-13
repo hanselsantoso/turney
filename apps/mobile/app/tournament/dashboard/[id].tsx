@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { tokens } from "@turney/shared";
 import { api } from "../../../src/api/client";
 import { useAuth } from "../../../src/stores/auth";
+import { useTournamentRoom } from "../../../src/realtime";
 import { Banner, Button, Card, Chip, SectionLabel } from "../../../src/ui";
 
 type Participant = { registrationId: string; userId: string; displayName: string; elo: number };
@@ -24,6 +25,7 @@ export default function TournamentDashboard() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const user = useAuth((s) => s.user);
   const router = useRouter();
+  useTournamentRoom(id);
 
   const tournament = useQuery<{ name: string; status: string; stages: Stage[] }>({
     queryKey: ["tournament", id],

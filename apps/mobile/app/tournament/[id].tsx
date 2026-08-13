@@ -3,6 +3,7 @@ import { Stack, useLocalSearchParams, useRouter } from "expo-router";
 import { tokens } from "@turney/shared";
 import { useAuth } from "../../src/stores/auth";
 import { useMyRegistrations, useRegister, useTournament } from "../../src/api/hooks";
+import { useCommunityAccent } from "../../src/theme";
 import { Banner, Button, Card, Chip, Display, SectionLabel } from "../../src/ui";
 
 const FORMAT_LABEL: Record<string, string> = {
@@ -22,6 +23,7 @@ export default function TournamentDetail() {
 
   const mine = (regs.data ?? []).find((r) => r.userId === user?.id);
   const canRegister = t?.status === "reg_open" && !mine;
+  const accent = useCommunityAccent(t?.communityId);
 
   if (!t) {
     return (
@@ -35,7 +37,7 @@ export default function TournamentDetail() {
   return (
     <ScrollView style={styles.wrap} contentContainerStyle={styles.content}>
       <Stack.Screen options={{ title: t.name }} />
-      <Banner>
+      <Banner color={accent}>
         <Chip
           label={t.status.replace("_", " ").toUpperCase()}
           tone={t.status === "in_progress" ? "live" : t.status === "reg_open" ? "accent" : "dim"}

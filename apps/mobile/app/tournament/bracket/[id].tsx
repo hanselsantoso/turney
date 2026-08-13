@@ -3,6 +3,7 @@ import { Stack, useLocalSearchParams } from "expo-router";
 import { useQuery } from "@tanstack/react-query";
 import { tokens } from "@turney/shared";
 import { api } from "../../../src/api/client";
+import { useTournamentRoom } from "../../../src/realtime";
 import { Chip, Display } from "../../../src/ui";
 
 type Participant = { registrationId: string; displayName: string; elo: number };
@@ -20,6 +21,7 @@ type Stage = { id: string; seq: number; name: string; format: string; status: st
 
 export default function BracketScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  useTournamentRoom(id);
 
   const tournament = useQuery<{ name: string; status: string; stages: Stage[] }>({
     queryKey: ["tournament", id],
