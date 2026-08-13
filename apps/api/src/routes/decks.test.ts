@@ -8,7 +8,11 @@ import { parts } from "../db/schema";
 type Session = { accessToken: string; user: { id: string } };
 const bearer = (s: Session) => ({ authorization: `Bearer ${s.accessToken}` });
 
-let blades: Array<{ id: string }>, ratchets: Array<{ id: string }>, bits: Array<{ id: string }>;
+let blades: Array<{ id: string; line?: string | null }>,
+  ratchets: Array<{ id: string }>,
+  bits: Array<{ id: string }>;
+/* non-CX blades for simple 3-part slots (CX requires 5 parts) */
+const bxBlades = () => blades.filter((b) => b.line !== "CX");
 
 async function seedPartsOnce() {
   const { sql } = await import("../db/client");
@@ -18,6 +22,17 @@ async function seedPartsOnce() {
     env: { ...process.env },
     stdio: "ignore",
   });
+  /* brew import adds CX blades + lock chips; needs network - tolerate offline */
+  try {
+    execSync("pnpm exec tsx src/db/seed-brew.ts", {
+      cwd: new URL("../..", import.meta.url).pathname,
+      env: { ...process.env },
+      stdio: "ignore",
+      timeout: 60000,
+    });
+  } catch {
+    // offline: CX-specific test will be skipped
+  }
   const seeded = await db.select().from(parts);
   if (seeded.length < 100) throw new Error(`parts seed incomplete: ${seeded.length}`);
 }
@@ -67,7 +82,7 @@ describe("parts + decks + verification", () => {
     const app = buildApp();
     const gai = await mk(app, "Gai");
     const mkSlot = (i: number) => ({
-      bladeId: blades[i].id,
+      bladeId: bxBlades()[i].id,
       ratchetId: ratchets[i].id,
       bitId: bits[i].id,
     });
@@ -104,6 +119,74 @@ describe("parts + decks + verification", () => {
       },
     });
     expect(wrongKind.statusCode).toBe(422);
+  });
+
+  it("CX blades need lock chip + assist blade (5-part system)", async () => {
+    const app = buildApp();
+    const all = (await app.inject({ method: "GET", url: "/parts" })).json() as Array<{
+      id: string;
+      kind: string;
+      line: string | null;
+    }>;
+    const cxBlade = all.find((p) => p.kind === "blade" && p.line === "CX");
+    const lockChip = all.find((p) => p.kind === "lock_chip");
+    const assist = all.find((p) => p.kind === "assist_blade");
+    if (!cxBlade || !lockChip || !assist) return; // brew import offline: skip
+
+    const gai = await mk(app, "CxTester");
+    const bx = (i: number) => ({
+      bladeId: bxBlades()[i].id,
+      ratchetId: ratchets[i].id,
+      bitId: bits[i].id,
+    });
+
+    /* CX blade without lock chip/assist -> 422 */
+    const incomplete = await app.inject({
+      method: "POST",
+      url: "/decks",
+      headers: bearer(gai),
+      payload: {
+        name: "CX missing parts",
+        slots: [bx(0), bx(1), { bladeId: cxBlade.id, ratchetId: ratchets[2].id, bitId: bits[2].id }],
+      },
+    });
+    expect(incomplete.statusCode).toBe(422);
+    expect(incomplete.json().code).toBe("CX_INCOMPLETE");
+
+    /* full 5-part CX slot -> 201 */
+    const ok = await app.inject({
+      method: "POST",
+      url: "/decks",
+      headers: bearer(gai),
+      payload: {
+        name: "CX Deck",
+        slots: [
+          bx(0),
+          bx(1),
+          {
+            bladeId: cxBlade.id,
+            ratchetId: ratchets[2].id,
+            bitId: bits[2].id,
+            lockChipId: lockChip.id,
+            assistBladeId: assist.id,
+          },
+        ],
+      },
+    });
+    expect(ok.statusCode).toBe(201);
+
+    /* lock chip on a non-CX blade -> 422 */
+    const notCx = await app.inject({
+      method: "POST",
+      url: "/decks",
+      headers: bearer(gai),
+      payload: {
+        name: "BX with lock chip",
+        slots: [bx(0), bx(1), { ...bx(2), lockChipId: lockChip.id, assistBladeId: assist.id }],
+      },
+    });
+    expect(notCx.statusCode).toBe(422);
+    expect(notCx.json().code).toBe("NOT_CX");
   });
 
   it("attach deck to registration, QR resolve, judge verify (not own)", async () => {
@@ -156,7 +239,7 @@ describe("parts + decks + verification", () => {
         payload: {
           name: "Storm Trio",
           slots: [0, 1, 2].map((i) => ({
-            bladeId: blades[i].id,
+            bladeId: bxBlades()[i].id,
             ratchetId: ratchets[i].id,
             bitId: bits[i].id,
           })),

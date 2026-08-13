@@ -179,7 +179,13 @@ export const groupMembers = pgTable(
   (t) => [unique().on(t.groupId, t.registrationId)],
 );
 
-export const partKindEnum = pgEnum("part_kind", ["blade", "ratchet", "bit", "assist_blade"]);
+export const partKindEnum = pgEnum("part_kind", [
+  "blade",
+  "ratchet",
+  "bit",
+  "assist_blade",
+  "lock_chip",
+]);
 export const verificationStatusEnum = pgEnum("verification_status", ["approved", "rejected"]);
 
 export const parts = pgTable(
@@ -217,6 +223,7 @@ export const deckSlots = pgTable(
     ratchetId: uuid("ratchet_id").notNull().references(() => parts.id),
     bitId: uuid("bit_id").notNull().references(() => parts.id),
     assistBladeId: uuid("assist_blade_id").references(() => parts.id),
+    lockChipId: uuid("lock_chip_id").references(() => parts.id),
   },
   (t) => [unique().on(t.deckId, t.slot)],
 );

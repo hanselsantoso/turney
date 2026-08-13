@@ -18,7 +18,9 @@ const slotInput = z.object({
   bladeId: z.string().uuid(),
   ratchetId: z.string().uuid(),
   bitId: z.string().uuid(),
+  /* CX system: lock chip + assist blade complete the 5-part bey */
   assistBladeId: z.string().uuid().nullish(),
+  lockChipId: z.string().uuid().nullish(),
 });
 
 const createDeckBody = z.object({
@@ -56,12 +58,15 @@ export async function deckRoutes(app: FastifyInstance) {
     }
     /* referenced parts must exist and be of the right kind */
     const allIds = parsed.data.slots.flatMap((s) =>
-      [s.bladeId, s.ratchetId, s.bitId, s.assistBladeId].filter((x): x is string => Boolean(x)),
+      [s.bladeId, s.ratchetId, s.bitId, s.assistBladeId, s.lockChipId].filter(
+        (x): x is string => Boolean(x),
+      ),
     );
     const found = await db.select().from(parts).where(inArray(parts.id, allIds));
     const byId = new Map(found.map((p) => [p.id, p]));
     for (const s of parsed.data.slots) {
-      if (byId.get(s.bladeId)?.kind !== "blade")
+      const blade = byId.get(s.bladeId);
+      if (blade?.kind !== "blade")
         return reply.status(422).send({ code: "BAD_PART", message: "bladeId is not a blade" });
       if (byId.get(s.ratchetId)?.kind !== "ratchet")
         return reply.status(422).send({ code: "BAD_PART", message: "ratchetId is not a ratchet" });
@@ -71,6 +76,26 @@ export async function deckRoutes(app: FastifyInstance) {
         return reply
           .status(422)
           .send({ code: "BAD_PART", message: "assistBladeId is not an assist blade" });
+      if (s.lockChipId && byId.get(s.lockChipId)?.kind !== "lock_chip")
+        return reply
+          .status(422)
+          .send({ code: "BAD_PART", message: "lockChipId is not a lock chip" });
+
+      /* CX blades are a 5-part system: lock chip + blade + assist + ratchet + bit.
+         Non-CX blades take neither. */
+      if (blade.line === "CX") {
+        if (!s.lockChipId || !s.assistBladeId) {
+          return reply.status(422).send({
+            code: "CX_INCOMPLETE",
+            message: `${blade.name} is a CX blade: lock chip and assist blade required`,
+          });
+        }
+      } else if (s.lockChipId || s.assistBladeId) {
+        return reply.status(422).send({
+          code: "NOT_CX",
+          message: `${blade.name} is not a CX blade: lock chip / assist blade not allowed`,
+        });
+      }
     }
 
     const [deck] = await db

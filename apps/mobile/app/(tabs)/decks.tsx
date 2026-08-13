@@ -29,14 +29,34 @@ type Part = {
   points: number | null;
   imageUrl: string | null;
 };
-type SlotDraft = { bladeId?: string; ratchetId?: string; bitId?: string };
+type SlotDraft = {
+  bladeId?: string;
+  ratchetId?: string;
+  bitId?: string;
+  assistBladeId?: string;
+  lockChipId?: string;
+};
 type Deck = {
   id: string;
   name: string;
   slots: Array<{ slot: number; bladeId: string; ratchetId: string; bitId: string }>;
 };
 
-const KIND_LABEL = { blade: "Blade", ratchet: "Ratchet", bit: "Bit" } as const;
+const KIND_LABEL = {
+  blade: "Blade",
+  ratchet: "Ratchet",
+  bit: "Bit",
+  assist_blade: "Assist Blade",
+  lock_chip: "Lock Chip",
+} as const;
+
+const FIELD: Record<keyof typeof KIND_LABEL, keyof SlotDraft> = {
+  blade: "bladeId",
+  ratchet: "ratchetId",
+  bit: "bitId",
+  assist_blade: "assistBladeId",
+  lock_chip: "lockChipId",
+};
 
 export default function Decks() {
   const token = useAuth((s) => s.accessToken);
@@ -78,7 +98,14 @@ export default function Decks() {
       .filter((p) => !q || p.name.toLowerCase().includes(q));
   }, [kindParts, search, line, ptype]);
 
-  const complete = slots.every((s) => s.bladeId && s.ratchetId && s.bitId);
+  const isCx = (s: SlotDraft) => (s.bladeId ? byId.get(s.bladeId)?.line === "CX" : false);
+  const complete = slots.every(
+    (s) =>
+      s.bladeId &&
+      s.ratchetId &&
+      s.bitId &&
+      (!isCx(s) || (s.lockChipId && s.assistBladeId)),
+  );
 
   async function save() {
     setError(null);
@@ -101,7 +128,7 @@ export default function Decks() {
   }
 
   function PartRow({ slot, kind }: { slot: number; kind: keyof typeof KIND_LABEL }) {
-    const idKey = `${kind}Id` as keyof SlotDraft;
+    const idKey = FIELD[kind];
     const part = slots[slot][idKey] ? byId.get(slots[slot][idKey]!) : null;
     return (
       <Pressable
@@ -160,10 +187,15 @@ export default function Decks() {
             value={name}
             onChangeText={setName}
           />
-          {slots.map((_, i) => (
+          {slots.map((s, i) => (
             <Card key={i} style={{ padding: 12, gap: 8 }}>
-              <Text style={styles.slotHead}>BEYBLADE {i + 1}</Text>
+              <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                <Text style={styles.slotHead}>BEYBLADE {i + 1}</Text>
+                {isCx(s) ? <Chip label="CX · 5 PARTS" tone="accent" /> : null}
+              </View>
+              {isCx(s) ? <PartRow slot={i} kind="lock_chip" /> : null}
               <PartRow slot={i} kind="blade" />
+              {isCx(s) ? <PartRow slot={i} kind="assist_blade" /> : null}
               <PartRow slot={i} kind="ratchet" />
               <PartRow slot={i} kind="bit" />
             </Card>
@@ -221,9 +253,18 @@ export default function Decks() {
                   style={styles.pickRow}
                   onPress={() => {
                     if (picker) {
-                      const idKey = `${picker.kind}Id` as keyof SlotDraft;
+                      const idKey = FIELD[picker.kind];
                       setSlots((s) =>
-                        s.map((slot, k) => (k === picker.slot ? { ...slot, [idKey]: item.id } : slot)),
+                        s.map((slot, k) => {
+                          if (k !== picker.slot) return slot;
+                          const next = { ...slot, [idKey]: item.id };
+                          /* switching to a non-CX blade drops CX-only parts */
+                          if (picker.kind === "blade" && item.line !== "CX") {
+                            delete next.lockChipId;
+                            delete next.assistBladeId;
+                          }
+                          return next;
+                        }),
                       );
                     }
                     setPicker(null);
